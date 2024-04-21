@@ -1,3 +1,16 @@
+const webpack = require('webpack');
+require('dotenv').config();  // Load your environment variables from .env file
+
+module.exports = {
+  // Other Webpack configuration
+  plugins: [
+    new webpack.DefinePlugin({
+      'process.env.API_KEY': JSON.stringify(process.env.API_KEY),
+    }),
+  ],
+};
+
+
 const apiKey = process.env.API_KEY;
 
 console.log("The API key is:", apiKey);  // It should match the secret
