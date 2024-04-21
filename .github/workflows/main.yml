@@ -1,20 +1,24 @@
-name: Example Workflow  # Name your workflow
-
+name: CI Workflow
 on:
   push:
     branches:
-      - main  # Trigger when pushing to the main branch
-
+      - main
 jobs:
   build:
-    runs-on: ubuntu-latest  # Use the latest Ubuntu environment
-
+    runs-on: ubuntu-latest
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v2  # Checks out your repository code
+      - name: Checkout code
+        uses: actions/checkout@v2
       
-      - name: Set Environment Variables
-        run: echo "API_KEY=${{ secrets.GITHUB_TOKEN }}" >> $GITHUB_ENV  # Get the secret and set it in the environment
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'  # Use the Node.js version you need
       
-      - name: Print API Key
-        run: echo "API key is $API_KEY"  # Print the value to check if it's working
+      - name: Install dependencies
+        run: npm install
+      
+      - name: Run tests
+        env:
+          API_KEY: ${{ secrets.API_KEY }}  # Access your GitHub secret
+        run: node main.js  # Or the command you need to run
