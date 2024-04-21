@@ -1,0 +1,20 @@
+name: Example Workflow  # Name your workflow
+
+on:
+  push:
+    branches:
+      - main  # Trigger when pushing to the main branch
+
+jobs:
+  build:
+    runs-on: ubuntu-latest  # Use the latest Ubuntu environment
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2  # Checks out your repository code
+      
+      - name: Set Environment Variables
+        run: echo "API_KEY=${{ secrets.API_KEY }}" >> $GITHUB_ENV  # Get the secret and set it in the environment
+      
+      - name: Print API Key
+        run: echo "API key is $API_KEY"  # Print the value to check if it's working
