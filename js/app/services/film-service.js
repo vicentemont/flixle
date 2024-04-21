@@ -65,22 +65,18 @@ export async function getRandomMovie() {
     let credits = await getCredits(output.id);
     const directors = credits.crew.filter(member => member.job === "Director");
     const actors = credits.cast.filter(member => member.known_for_department === "Acting");
-    console.log('actors are:' + actors);
+    console.log('Here, actors are:' + actors[0].name);
     if (actors.length > 0) {
-      const actorWithHighestPopularity = actors.reduce((prevActor, currentActor) => {
-        return (prevActor.popularity > currentActor.popularity) ? prevActor : currentActor;
-      });
 
-      console.log("Actor with highest popularity:", actorWithHighestPopularity);
-      output.actor = actorWithHighestPopularity.name;
-      console.log('Actor is: ' + actorWithHighestPopularity.name)
+      // Get an array of actor names
+      output.actors = actors;
     } else {
       console.log("No actors found in the 'Acting' department.");
     }
     output.director = directors;
 
 
-  
+
     console.log('Director is: ' + output.director[0].name);
     return output;
 
@@ -164,24 +160,21 @@ async function fetchCardById(id) {
     let credits = await getCredits(id);
     const directors = credits.crew.filter(member => member.job === "Director");
     const actors = credits.cast.filter(member => member.known_for_department === "Acting");
-    console.log('actors are:' + actors);
+    console.log('actors are:' + actors[0].name);
     if (actors.length > 0) {
-      const actorWithHighestPopularity = actors.reduce((prevActor, currentActor) => {
-        return (prevActor.popularity > currentActor.popularity) ? prevActor : currentActor;
-      });
+      
 
-      console.log("Actor with highest popularity:", actorWithHighestPopularity);
-      film.actor = actorWithHighestPopularity.name;
-      console.log('Actor is: ' + actorWithHighestPopularity.name)
+      film.actors = actors;
+      
     } else {
       console.log("No actors found in the 'Acting' department.");
     }
     film.director = directors;
 
 
-  
+
     console.log('Director is: ' + film.director[0].name);
-    
+
 
 
     console.log('film is: ', film);

@@ -356,7 +356,7 @@ textarea {
     backdrop-filter: blur(50px);
 
     animation:
-    slideDownHalfSize 0.2s ease-in-out,
+        slideDownHalfSize 0.2s ease-in-out,
         /* Then, scale up after 1-second delay */
         spin 4s linear infinite
 }
@@ -520,8 +520,6 @@ textarea {
 
 }
 
-
-
 #movieDetails {
 
     display: grid;
@@ -540,143 +538,27 @@ textarea {
     overflow: hidden;
 }
 
-#DIRECTOR p {
-    margin: 5px;
-    padding: 0px;
-}
-
-#DIRECTOR div {
-    text-align: center;
-    /* Center the text horizontally */
-    text-overflow: ellipsis;
-    overflow: hidden;
-    display: flex;
-    /* Use flexbox */
-    justify-content: center;
-    /* Center the text horizontally */
-    align-items: center;
-    /* Center the text vertically */
-}
-
-
-#DIRECTOR span {
-    margin: 10px;
-    text-align: center;
-    /* Center the text horizontally */
-    text-overflow: ellipsis;
-    overflow: hidden;
-    display: flex;
-    /* Use flexbox */
-    justify-content: center;
-    /* Center the text horizontally */
-    align-items: center;
-    /* Center the text vertically */
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
-    /* Limit the number of lines to 2 */
-}
-
-
-#ACTOR p {
-    margin: 3px;
-}
-
-
-
 #GENRES {
     grid-column: span 8;
     width: 215px;
     overflow: hidden;
 }
 
-#GENRES p {
-    margin: 5px;
-    padding: 0px;
-}
-
-#GENRES div {
-    text-align: center;
-    /* Center the text horizontally */
-    text-overflow: ellipsis;
-    overflow: hidden;
-    display: flex;
-    /* Use flexbox */
-    justify-content: center;
-    /* Center the text horizontally */
-    align-items: center;
-    /* Center the text vertically */
-}
-
-
-#GENRES span {
-    margin: 10px;
-    text-align: center;
-    /* Center the text horizontally */
-    text-overflow: ellipsis;
-    overflow: hidden;
-    display: flex;
-    /* Use flexbox */
-    justify-content: center;
-    /* Center the text horizontally */
-    align-items: center;
-    /* Center the text vertically */
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
-    /* Limit the number of lines to 2 */
-}
-
 #LANGUAGE {
     overflow: hidden;
 }
 
-#LANGUAGE p {
-    margin: 5px;
-    padding: 0px;
-}
-
-#LANGUAGE div {
-    text-align: center;
-    /* Center the text horizontally */
-    overflow: auto;
-    display: flex;
-    /* Use flexbox */
-    justify-content: center;
-    /* Center the text horizontally */
-    align-items: center;
-    /* Center the text vertically */
-}
-
-#LANGUAGE span {
-    margin: 10px;
-    text-align: center;
-    /* Center the text horizontally */
-    overflow: auto;
-    display: flex;
-    white-space: nowrap;
-    /* Use flexbox */
-    justify-content: center;
-    /* Center the text horizontally */
-    align-items: center;
-    /* Center the text vertically */
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 3;
-    /* Limit the number of lines to 3 */
-    /* Limit the number of lines to 3 */
-}
-
 .movieDetail {
     backdrop-filter: blur(1px);
-
     grid-column: span 4;
     border-width: 2px;
     background-color: rgba(255, 255, 255, 0.788);
     border-style: none;
     border-color: white;
     border-radius: 20px;
+    display: flex;
     justify-content: center;
+    align-items: center;
     box-shadow: 0 4px 4px rgba(0, 0, 0, 0.3);
     height: 100px;
     width: 100px;
@@ -694,18 +576,13 @@ textarea {
 }
 
 .squareName {
+    align-self: flex-start;
+    text-align: center;
     padding-top: 5px;
     font-size: 10px;
     font-weight: bold;
-}
-
-#movieYear {
-
-    height: 100px;
-    width: 100px;
-    /* Adjust width to fit within container */
-    /* Add margin between items */
-    /* Add margin between rows */
+    margin: 0%;
+    position:absolute;
 
 }
 

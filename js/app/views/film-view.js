@@ -48,8 +48,8 @@ function checkCountry(string, title) {
 function dynamicFontSize(textLength) {
   if (textLength > 27) {
     return `font-size: 12px;`
-  } else if (textLength > 25) {
-    return `font-size: 13px;`
+  } else if (textLength > 20) {
+    return `font-size: 14px;`
   } else if (textLength > 10) {
     return `font-size: 17px;`
   } else {
@@ -90,9 +90,43 @@ function roundNumber(number) {
   }
 }
 
+
+
 // compares search results with correct game answer and returns correct html with correct color ans proximity symbols
 function compare(param, param1, title) {
-  if (Array.isArray(param)) {
+  if (title === "ACTOR") {
+    const actorsIds = param1.map(item => item.id);
+    const actorWithHighestPopularity = param1.reduce((prevActor, currentActor) => {
+      return (prevActor.popularity > currentActor.popularity) ? prevActor : currentActor;
+    });
+
+    if (param.id === actorWithHighestPopularity.id) {
+      console.log("entered Equal")
+      return `
+          <div id="${title}" class="movieDetail" style="background-color: #1ed760d9; ${dynamicFontSize(param.name.length+15)}"> 
+              <p class="squareName">M.P.ACTOR</p>
+              <div>
+                  <span>${param.name.toUpperCase()} </span>
+              </div> 
+          </div>`;
+    } else if (actorsIds.includes(param.id)) {
+      return `
+      <div id="${title}" class="movieDetail" style="background-color: #ffa500d6; ${dynamicFontSize(param.name.length+15)}"> 
+          <p class="squareName">M.P.ACTOR</p>
+          <div>
+              <span>${param.name.toUpperCase()} </span>
+          </div> 
+      </div>`
+    } else {
+      return `
+          <div id="${title}" class="movieDetail" style="background-color: rgba(255, 0, 0, 0.8); ${dynamicFontSize(param.name.length+15)}"> 
+              <p class="squareName">M.P.ACTOR</p>
+              <div>
+                  <span>${param.name.toUpperCase()} </span>
+              </div> 
+          </div>`;
+    }
+  } else if (Array.isArray(param)) {
     console.log(param, param1);
     const paramIds = param.map(item => item.id);
     const param1Ids = param1.map(item => item.id);
@@ -125,8 +159,7 @@ function compare(param, param1, title) {
                 </div> 
             </div>`;
     }
-  }
-  else if (typeof param === 'string') {
+  } else if (typeof param === 'string') {
     let compare = param.localeCompare(param1);
     if (compare > 0) {
       return `
@@ -181,8 +214,12 @@ function compare(param, param1, title) {
 }
 
 // a function to create a film card, which is the html code for a single film
-function createFilmCard({ id, title, popularity, genres, budget, actor, revenue, director, original_language, vote_average, origin_country, release_date, poster_path }) {
-  
+function createFilmCard({ id, title, popularity, genres, budget, actors, revenue, director, original_language, vote_average, origin_country, release_date, poster_path }) {
+  const actorWithHighestPopularity = actors.reduce((prevActor, currentActor) => {
+    return (prevActor.popularity > currentActor.popularity) ? prevActor : currentActor;
+  });
+
+
   if (id === correctAnswer.id) {
     gameWon = true;
     console.log('You win!');
@@ -206,7 +243,7 @@ function createFilmCard({ id, title, popularity, genres, budget, actor, revenue,
   ${compare(revenue, correctAnswer.revenue, "REVENUE")}
   ${compare(director, correctAnswer.director, "DIRECTOR")}
   ${compare(popularity, correctAnswer.popularity, "POPULARITY")}
-  ${compare(actor, correctAnswer.actor, "ACTOR")}
+  ${compare(actorWithHighestPopularity, correctAnswer.actors, "ACTOR")}
   ${compare(genres, correctAnswer.genres, "GENRES")}
  
 </div>
