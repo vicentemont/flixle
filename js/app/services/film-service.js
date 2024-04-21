@@ -1,4 +1,7 @@
-import API  from '../apiKeys.js';
+import dotenv from 'dotenv';
+dotenv.config();
+
+const apiKey = process.env.API_KEY;
 
 
 let film;
@@ -45,7 +48,7 @@ export async function getRandomMovie() {
     method: 'GET',
     headers: {
       accept: 'application/json',
-      Authorization: `Bearer ${API.key}`
+      Authorization: `Bearer ${apiKey}`
     }
   };
   try {
@@ -100,7 +103,7 @@ async function fetchCardSearch(searchTerm) {
     method: 'GET',
     headers: {
       accept: 'application/json',
-      Authorization: `Bearer ${API.key}`
+      Authorization: `Bearer ${apiKey}`
     }
   };
   try {
@@ -136,7 +139,7 @@ async function fetchCardById(id) {
     method: 'GET',
     headers: {
       accept: 'application/json',
-      Authorization: `Bearer ${API.key}`
+      Authorization: `Bearer ${apiKey}`
     }
   };
   try {
