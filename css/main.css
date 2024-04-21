@@ -1,0 +1,737 @@
+/*! HTML5 Boilerplate v7.1.0 | MIT License | https://html5boilerplate.com/ */
+
+/* main.css 1.0.0 | MIT License | https://github.com/h5bp/main.css#readme */
+/*
+ * What follows is the result of much research on cross-browser styling.
+ * Credit left inline and big thanks to Nicolas Gallagher, Jonathan Neal,
+ * Kroc Camen, and the H5BP dev community and team.
+ */
+
+
+/* ==========================================================================
+   Base styles: opinionated defaults
+   ========================================================================== */
+
+html {
+    color: #222;
+    font-size: 1em;
+    line-height: 1.4;
+}
+
+/*
+ * Remove text-shadow in selection highlight:
+ * https://twitter.com/miketaylr/status/12228805301
+ *
+ * Vendor-prefixed and regular ::selection selectors cannot be combined:
+ * https://stackoverflow.com/a/16982510/7133471
+ *
+ * Customize the background color to match your design.
+ */
+
+::-moz-selection {
+    background: #b3d4fc;
+    text-shadow: none;
+}
+
+::selection {
+    background: #b3d4fc;
+    text-shadow: none;
+}
+
+/*
+ * A better looking default horizontal rule
+ */
+
+hr {
+    display: block;
+    height: 1px;
+    border: 0;
+    border-top: 1px solid #ccc;
+    margin: 1em 0;
+    padding: 0;
+}
+
+/*
+ * Remove the gap between audio, canvas, iframes,
+ * images, videos and the bottom of their containers:
+ * https://github.com/h5bp/html5-boilerplate/issues/440
+ */
+
+audio,
+canvas,
+iframe,
+img,
+svg,
+video {
+    vertical-align: middle;
+}
+
+/*
+ * Remove default fieldset styles.
+ */
+
+fieldset {
+    border: 0;
+    margin: 0;
+    padding: 0;
+}
+
+/*
+ * Allow only vertical resizing of textareas.
+ */
+
+textarea {
+    resize: vertical;
+}
+
+/* ==========================================================================
+   Browser Upgrade Prompt
+   ========================================================================== */
+
+.browserupgrade {
+    margin: 0.2em 0;
+    background: #ccc;
+    color: #000;
+    padding: 0.2em 0;
+}
+
+
+
+
+/* ==========================================================================
+   Author's custom styles
+   ========================================================================== */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* ==========================================================================
+   Helper classes
+   ========================================================================== */
+
+/*
+ * Hide visually and from screen readers
+ */
+
+.hidden {
+    display: none !important;
+}
+
+/*
+* Hide only visually, but have it available for screen readers:
+* https://snook.ca/archives/html_and_css/hiding-content-for-accessibility
+*
+* 1. For long content, line feeds are not interpreted as spaces and small width
+*    causes content to wrap 1 word per line:
+*    https://medium.com/@jessebeach/beware-smushed-off-screen-accessible-text-5952a4c2cbfe
+*/
+
+.visuallyhidden {
+    border: 0;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 1px;
+    white-space: nowrap;
+    /* 1 */
+}
+
+/*
+* Extends the .visuallyhidden class to allow the element
+* to be focusable when navigated to via the keyboard:
+* https://www.drupal.org/node/897638
+*/
+
+.visuallyhidden.focusable:active,
+.visuallyhidden.focusable:focus {
+    clip: auto;
+    height: auto;
+    margin: 0;
+    overflow: visible;
+    position: static;
+    width: auto;
+    white-space: inherit;
+}
+
+/*
+* Hide visually and from screen readers, but maintain layout
+*/
+
+.invisible {
+    visibility: hidden;
+}
+
+/*
+* Clearfix: contain floats
+*
+* For modern browsers
+* 1. The space content is one way to avoid an Opera bug when the
+*    `contenteditable` attribute is included anywhere else in the document.
+*    Otherwise it causes space to appear at the top and bottom of elements
+*    that receive the `clearfix` class.
+* 2. The use of `table` rather than `block` is only necessary if using
+*    `:before` to contain the top-margins of child elements.
+*/
+
+.clearfix:before,
+.clearfix:after {
+    content: " ";
+    /* 1 */
+    display: table;
+    /* 2 */
+}
+
+.clearfix:after {
+    clear: both;
+}
+
+
+/* ==========================================================================
+   EXAMPLE Media Queries for Responsive Design.
+   These examples override the primary ('mobile first') styles.
+   Modify as content requires.
+   ========================================================================== */
+
+@media only screen and (min-width: 35em) {
+    /* Style adjustments for viewports that meet the condition */
+}
+
+@media print,
+(-webkit-min-device-pixel-ratio: 1.25),
+(min-resolution: 1.25dppx),
+(min-resolution: 120dpi) {
+    /* Style adjustments for high resolution devices */
+}
+
+
+/* ==========================================================================
+   Print styles.
+   Inlined to avoid the additional HTTP request:
+   https://www.phpied.com/delay-loading-your-print-css/
+   ========================================================================== */
+
+@media print {
+
+    *,
+    *:before,
+    *:after {
+        background: transparent !important;
+        color: #000 !important;
+        /* Black prints faster */
+        -webkit-box-shadow: none !important;
+        box-shadow: none !important;
+        text-shadow: none !important;
+    }
+
+    a,
+    a:visited {
+        text-decoration: underline;
+    }
+
+    a[href]:after {
+        content: " (" attr(href) ")";
+    }
+
+    abbr[title]:after {
+        content: " (" attr(title) ")";
+    }
+
+    /*
+     * Don't show links that are fragment identifiers,
+     * or use the `javascript:` pseudo protocol
+     */
+
+    a[href^="#"]:after,
+    a[href^="javascript:"]:after {
+        content: "";
+    }
+
+    pre {
+        white-space: pre-wrap !important;
+    }
+
+    pre,
+    blockquote {
+        border: 1px solid #999;
+        page-break-inside: avoid;
+    }
+
+    /*
+     * Printing Tables:
+     * http://css-discuss.incutio.com/wiki/Printing_Tables
+     */
+
+    thead {
+        display: table-header-group;
+    }
+
+    tr,
+    img {
+        page-break-inside: avoid;
+    }
+
+    p,
+    h2,
+    h3 {
+        orphans: 3;
+        widows: 3;
+    }
+
+    h2,
+    h3 {
+        page-break-after: avoid;
+    }
+}
+
+
+.bg {
+    background-color: #202020;
+}
+
+
+
+#app {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+@property --rotate {
+    syntax: "<angle>";
+    initial-value: 120deg;
+    inherits: false;
+}
+
+/* Animation to scale up to full size */
+@keyframes scaleUp {
+    from {
+        transform: scale(0.5);
+    }
+
+    to {
+        transform: scale(1);
+    }
+}
+
+/* Animation to slide down with a smaller scale */
+@keyframes slideDownHalfSize {
+    from {
+        transform: translateY(20%) scale(0.8);
+    }
+
+    to {
+        transform: translateY(0%);
+    }
+}
+
+.gameCardContainer.container {
+    display: block;
+    /* Ensure container size fits its content */
+    border-radius: 30px;
+    /* Apply border radius */
+    overflow: hidden;
+    /* Ensure child elements don't overflow */
+    width: 370px;
+    border-style: none;
+    border-color: white;
+    padding: 5px;
+
+    box-shadow: 0px 0px 10px rgb(255, 255, 255);
+    background: linear-gradient(var(--rotate), rgba(131, 58, 180, 1) 0%, rgba(253, 29, 29, 1) 50%, rgba(252, 176, 69, 1) 100%);
+    backdrop-filter: blur(50px);
+
+    animation:
+    slideDownHalfSize 0.2s ease-in-out,
+        /* Then, scale up after 1-second delay */
+        spin 4s linear infinite
+}
+
+
+
+
+
+
+#gameCard {
+    background-color: rgba(255, 0, 0, 0.5);
+    width: 100%;
+    padding: 20px;
+
+    border-radius: 25px;
+    /* Apply border radius */
+    background-position: center;
+    border-width: 4px;
+
+}
+
+@keyframes spin {
+    0% {
+        --rotate: 0deg;
+    }
+
+    100% {
+        --rotate: 360deg;
+    }
+}
+
+#counter {
+    display: flex;
+    font-size: 15px;
+    width: 100%;
+    color: white;
+    justify-content: center;
+
+}
+
+#counter p {
+    display: flex;
+    padding-right: 10px;
+    margin: 0px;
+    color: white;
+    justify-content: center;
+    text-align: center;
+
+}
+
+
+#movieTitle {
+    height: 110px;
+    border-radius: 20px;
+    border-width: 2px;
+
+    border-style: none;
+    border-color: rgb(0, 0, 0);
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: center;
+    color: rgb(255, 255, 255);
+    overflow: hidden;
+    overflow: hidden;
+
+}
+
+@keyframes glowing {
+    0% {
+        transform: rotate(0);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+
+#movieTitle img {
+    width: 100px;
+    height: 100%;
+    border-radius: 5px 5px 0px 0px 0px;
+    object-fit: cover;
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.3);
+}
+
+#movieTitle div {
+    height: 100%;
+    width: 100%;
+    border-end-end-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(255, 255, 255, 0.788);
+}
+
+#movieTitle h3 {
+    color: #000;
+    font-weight: bold;
+    max-width: 220px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+}
+
+#searchSection {
+    width: 300px;
+    display: flex;
+    justify-content: start;
+    flex-wrap: wrap;
+    padding: 0px;
+    overflow: hidden;
+    border-radius: 15px;
+
+    border-color: #d71b1b;
+    border-width: 3px;
+    background-color: white;
+
+}
+
+#searchBar {
+    width: 300px;
+    height: 30px;
+    border-radius: 15px;
+    border-style: solid;
+    padding-left: 10px;
+    margin: 0px;
+    margin-bottom: 0px;
+    border-color: #cecece;
+    border-width: 2px;
+    background-color: white;
+
+}
+
+.suggestion:hover {
+    background-color: #ededed;
+}
+
+.suggestion {
+    height: 30px;
+    width: 300px;
+    margin: 0px;
+    padding-left: 10px;
+    padding-right: 10px;
+    display: block;
+    /* Change display property to block */
+    align-items: center;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    background-color: white;
+}
+
+#suggestionsContainer {
+    margin-top: 5px;
+
+}
+
+
+
+#movieDetails {
+
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    grid-auto-rows: 110px;
+    padding-top: 20px;
+    gap: 10px;
+    font-size: larger;
+    font-weight: bold;
+
+}
+
+#DIRECTOR {
+    grid-column: span 8;
+    width: 215px;
+    overflow: hidden;
+}
+
+#DIRECTOR p {
+    margin: 5px;
+    padding: 0px;
+}
+
+#DIRECTOR div {
+    text-align: center;
+    /* Center the text horizontally */
+    text-overflow: ellipsis;
+    overflow: hidden;
+    display: flex;
+    /* Use flexbox */
+    justify-content: center;
+    /* Center the text horizontally */
+    align-items: center;
+    /* Center the text vertically */
+}
+
+
+#DIRECTOR span {
+    margin: 10px;
+    text-align: center;
+    /* Center the text horizontally */
+    text-overflow: ellipsis;
+    overflow: hidden;
+    display: flex;
+    /* Use flexbox */
+    justify-content: center;
+    /* Center the text horizontally */
+    align-items: center;
+    /* Center the text vertically */
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    /* Limit the number of lines to 2 */
+}
+
+
+#ACTOR p {
+    margin: 3px;
+}
+
+
+
+#GENRES {
+    grid-column: span 8;
+    width: 215px;
+    overflow: hidden;
+}
+
+#GENRES p {
+    margin: 5px;
+    padding: 0px;
+}
+
+#GENRES div {
+    text-align: center;
+    /* Center the text horizontally */
+    text-overflow: ellipsis;
+    overflow: hidden;
+    display: flex;
+    /* Use flexbox */
+    justify-content: center;
+    /* Center the text horizontally */
+    align-items: center;
+    /* Center the text vertically */
+}
+
+
+#GENRES span {
+    margin: 10px;
+    text-align: center;
+    /* Center the text horizontally */
+    text-overflow: ellipsis;
+    overflow: hidden;
+    display: flex;
+    /* Use flexbox */
+    justify-content: center;
+    /* Center the text horizontally */
+    align-items: center;
+    /* Center the text vertically */
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    /* Limit the number of lines to 2 */
+}
+
+#LANGUAGE {
+    overflow: hidden;
+}
+
+#LANGUAGE p {
+    margin: 5px;
+    padding: 0px;
+}
+
+#LANGUAGE div {
+    text-align: center;
+    /* Center the text horizontally */
+    overflow: auto;
+    display: flex;
+    /* Use flexbox */
+    justify-content: center;
+    /* Center the text horizontally */
+    align-items: center;
+    /* Center the text vertically */
+}
+
+#LANGUAGE span {
+    margin: 10px;
+    text-align: center;
+    /* Center the text horizontally */
+    overflow: auto;
+    display: flex;
+    white-space: nowrap;
+    /* Use flexbox */
+    justify-content: center;
+    /* Center the text horizontally */
+    align-items: center;
+    /* Center the text vertically */
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    /* Limit the number of lines to 3 */
+    /* Limit the number of lines to 3 */
+}
+
+.movieDetail {
+    backdrop-filter: blur(1px);
+
+    grid-column: span 4;
+    border-width: 2px;
+    background-color: rgba(255, 255, 255, 0.788);
+    border-style: none;
+    border-color: white;
+    border-radius: 20px;
+    justify-content: center;
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.3);
+    height: 100px;
+    width: 100px;
+    /* Adjust width to fit within container */
+    /* Add margin between items */
+    /* Add margin between rows */
+    text-align: center;
+
+}
+
+.movieDetail div img {
+    height: 38px;
+    width: 48px;
+    object-fit: cover;
+}
+
+.squareName {
+    padding-top: 5px;
+    font-size: 10px;
+    font-weight: bold;
+}
+
+#movieYear {
+
+    height: 100px;
+    width: 100px;
+    /* Adjust width to fit within container */
+    /* Add margin between items */
+    /* Add margin between rows */
+
+}
+
+#homeMenu {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* Center vertically */
+    flex-flow: column;
+    margin-top: 20px;
+}
+
+#homeMenu div {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#startButton {
+    width: 150px;
+    height: 50px;
+    border-radius: 10px;
+    margin-top: 50px;
+    background: linear-gradient(141deg, rgba(131, 58, 180, 1) 0%, rgba(253, 29, 29, 1) 75%, rgba(252, 176, 69, 1) 100%);
+    border-width: 0px;
+    color: white;
+    font-weight: bold;
+}
