@@ -1,7 +1,6 @@
-import dotenv from 'dotenv';
-dotenv.config();
-
 const apiKey = process.env.API_KEY;
+
+console.log("The API key is:", apiKey);  // It should match the secret
 
 
 let film;
