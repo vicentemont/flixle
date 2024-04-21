@@ -1,3 +1,6 @@
+import API  from '../apiKeys.js';
+
+
 let film;
 /* {
   title: "Star Wars",
@@ -6,15 +9,13 @@ let film;
   imdbRating: 8.6,
 },
  */
-let idToSearch = '522249';
-let apiKey = '56d7c26f1c34ff059865b7b6691f1dfc';
 
 async function getCredits(id) {
   const options = {
     method: 'GET',
     headers: {
       accept: 'application/json',
-      Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI1NmQ3YzI2ZjFjMzRmZjA1OTg2NWI3YjY2OTFmMWRmYyIsInN1YiI6IjY2MTljZTIwNjllYjkwMDE2M2I3NTgyMCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.sjdfZEmPvZQTV3kKlkCwFlN0UrN-q96L_cgzDDXpn-I'
+      Authorization: `Bearer ${API.key}`
     }
   };
 
@@ -44,7 +45,7 @@ export async function getRandomMovie() {
     method: 'GET',
     headers: {
       accept: 'application/json',
-      Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI1NmQ3YzI2ZjFjMzRmZjA1OTg2NWI3YjY2OTFmMWRmYyIsInN1YiI6IjY2MTljZTIwNjllYjkwMDE2M2I3NTgyMCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.sjdfZEmPvZQTV3kKlkCwFlN0UrN-q96L_cgzDDXpn-I'
+      Authorization: `Bearer ${API.key}`
     }
   };
   try {
@@ -99,7 +100,7 @@ async function fetchCardSearch(searchTerm) {
     method: 'GET',
     headers: {
       accept: 'application/json',
-      Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI1NmQ3YzI2ZjFjMzRmZjA1OTg2NWI3YjY2OTFmMWRmYyIsInN1YiI6IjY2MTljZTIwNjllYjkwMDE2M2I3NTgyMCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.sjdfZEmPvZQTV3kKlkCwFlN0UrN-q96L_cgzDDXpn-I'
+      Authorization: `Bearer ${API.key}`
     }
   };
   try {
@@ -135,7 +136,7 @@ async function fetchCardById(id) {
     method: 'GET',
     headers: {
       accept: 'application/json',
-      Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI1NmQ3YzI2ZjFjMzRmZjA1OTg2NWI3YjY2OTFmMWRmYyIsInN1YiI6IjY2MTljZTIwNjllYjkwMDE2M2I3NTgyMCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.sjdfZEmPvZQTV3kKlkCwFlN0UrN-q96L_cgzDDXpn-I'
+      Authorization: `Bearer ${API.key}`
     }
   };
   try {
@@ -162,10 +163,10 @@ async function fetchCardById(id) {
     const actors = credits.cast.filter(member => member.known_for_department === "Acting");
     console.log('actors are:' + actors[0].name);
     if (actors.length > 0) {
-      
+
 
       film.actors = actors;
-      
+
     } else {
       console.log("No actors found in the 'Acting' department.");
     }

@@ -90,8 +90,6 @@ function roundNumber(number) {
   }
 }
 
-
-
 // compares search results with correct game answer and returns correct html with correct color ans proximity symbols
 function compare(param, param1, title) {
   if (title === "ACTOR") {
@@ -264,6 +262,7 @@ function createSuggestions(suggestionsObj) {
 
 // adds EventListener to each suggestion to search when clicked by user
 function renderSuggestions(suggestionsObj) {
+  
   const suggestions = createSuggestions(suggestionsObj);
   elements.suggestions = $(suggestions);
 
@@ -300,6 +299,7 @@ function renderSuggestions(suggestionsObj) {
   elements.app.find('#searchSection').append(elements.suggestions);
 
 }
+
 // a function to render a single film, cleaning any previous film card 
 function renderFilm(film) {
   elements.filmCard = $(createFilmCard(film));
@@ -308,6 +308,7 @@ function renderFilm(film) {
 
 // adds EventListeners to searchBar element
 function renderSearchBar(eventName) {
+  
   // checking if the element already exists OR if there is no handler with that name (just because I don't want to render a button without a handler)
   if (elements[eventName] || !handlers[eventName]) {
     return;

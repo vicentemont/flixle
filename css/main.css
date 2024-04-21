@@ -301,6 +301,7 @@ textarea {
 
 .bg {
     background-color: #202020;
+    
 }
 
 
@@ -536,16 +537,26 @@ textarea {
     grid-column: span 8;
     width: 215px;
     overflow: hidden;
+    padding-right:10px;
+    padding-left:10px;
 }
 
 #GENRES {
     grid-column: span 8;
     width: 215px;
     overflow: hidden;
+    padding-right:10px;
+    padding-left:10px;
 }
 
 #LANGUAGE {
     overflow: hidden;
+}
+
+#ACTOR{
+
+    padding-right:10px;
+    padding-left:10px;
 }
 
 .movieDetail {
@@ -562,6 +573,8 @@ textarea {
     box-shadow: 0 4px 4px rgba(0, 0, 0, 0.3);
     height: 100px;
     width: 100px;
+    
+
     /* Adjust width to fit within container */
     /* Add margin between items */
     /* Add margin between rows */

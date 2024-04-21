@@ -18,6 +18,11 @@ function createLogo() {
     return `<div id="homeMenu" style="color: white;"> <h1>Flixle</h1>`
 }
 
+function createInstructions() {
+    return `<img src="Instructions.png" style="width:700px" alt="">
+    `
+}
+
 function renderLogo(eventName) {
     if (elements[eventName]) {
         return;
@@ -25,12 +30,13 @@ function renderLogo(eventName) {
 
     elements[eventName] = $(createLogo(eventName));
 
-    elements[eventName].on('click', () => {
+    /* elements[eventName].on('click', () => {
 
         elements.app.find('#buttonsSection').empty();
         window.location.hash = "home";
-    
-    })
+        
+
+    }) */
     elements.app.find('#homeMenu').prepend(elements[eventName])
 }
 
@@ -43,10 +49,17 @@ function renderStartButton(eventName) {
     elements[eventName].on('click', () => {
         getNewCorrectAnswer();
         elements.app.find('#buttonsSection').empty();
+        elements['Instructions'].remove();
+
         window.location.hash = "game";
     })
 
     elements.app.find('#buttonsSection').append(elements[eventName])
+}
+
+function renderInstructions(eventName) {
+    elements[eventName] = $(createInstructions());
+    elements.app.find('#homeMenu').append(elements[eventName])
 }
 
 function renderHomeMenu() {
@@ -65,5 +78,6 @@ export function render() {
     renderHomeMenu();
     renderLogo();
     renderStartButton("Start Game");
-    
+    renderInstructions("Instructions");
+
 };
