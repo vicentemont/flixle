@@ -525,7 +525,7 @@ textarea {
 
     display: grid;
     grid-template-columns: repeat(12, 1fr);
-    grid-auto-rows: 110px;
+    grid-auto-rows: 100px;
     padding-top: 20px;
     gap: 10px;
     font-size: larger;
@@ -535,7 +535,7 @@ textarea {
 
 #DIRECTOR {
     grid-column: span 8;
-    width: 215px;
+    width: 210px;
     overflow: hidden;
     padding-right: 10px;
     padding-left: 10px;
@@ -543,7 +543,7 @@ textarea {
 
 #GENRES {
     grid-column: span 8;
-    width: 215px;
+    width: 210px;
     overflow: hidden;
     padding-right: 10px;
     padding-left: 10px;
@@ -627,6 +627,8 @@ textarea {
 }
 
 @media (max-width: 600px) {
+    
+
     #instructions {
         margin-top: 30px;
         width: 80%;
