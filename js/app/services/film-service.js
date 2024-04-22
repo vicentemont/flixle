@@ -17,7 +17,7 @@ async function getCredits(id) {
     method: 'GET',
     headers: {
       accept: 'application/json',
-      Authorization: `Bearer ${API.key}`
+      Authorization: `Bearer ${apiKey}`
     }
   };
 
