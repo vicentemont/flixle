@@ -15,7 +15,6 @@ function hashchangeHandler() {
     defaultRoute;
 
   location.hash = routes[routeName].hash;
-
   loadController(routes[routeName].controller);
   console.log('hashChanged')
 }
@@ -34,8 +33,7 @@ async function loadController(controllerName) {
 
 // start the router setting and loading the default router.
 export function start() {
-  elements['Instructions'].remove();
   location.hash = routes[defaultRoute].hash;
-  loadController(routes[defaultRoute].controller);
+  //loadController(routes[defaultRoute].controller);
 
 }

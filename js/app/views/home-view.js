@@ -66,7 +66,6 @@ function renderHomeMenu() {
 export function render() {
     elements.app = $("#app");
     //elements.app.empty();
-    elements['Instructions'].remove();
     renderHomeMenu();
     renderLogo();
     renderStartButton("Start Game");
