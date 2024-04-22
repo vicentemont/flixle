@@ -59,16 +59,11 @@ export async function getRandomMovie() {
       console.log('API Error:', body.message);
       throw new Error(body.message);
     }
-    console.log(body.Response);
-
-    console.log('API Response getRandom:', body);
     // Decode HTML entities in the fetched questions
     let output = await getFilm(body.results[0].id);
-    console.log('Output is: ' + output)
     let credits = await getCredits(output.id);
     const directors = credits.crew.filter(member => member.job === "Director");
     const actors = credits.cast.filter(member => member.known_for_department === "Acting");
-    console.log('Here, actors are:' + actors[0].name);
     if (actors.length > 0) {
 
       // Get an array of actor names
@@ -80,7 +75,6 @@ export async function getRandomMovie() {
 
 
 
-    console.log('Director is: ' + output.director[0].name);
     return output;
 
   } catch (error) {
@@ -163,7 +157,6 @@ async function fetchCardById(id) {
     let credits = await getCredits(id);
     const directors = credits.crew.filter(member => member.job === "Director");
     const actors = credits.cast.filter(member => member.known_for_department === "Acting");
-    console.log('actors are:' + actors[0].name);
     if (actors.length > 0) {
 
 
@@ -173,13 +166,6 @@ async function fetchCardById(id) {
       console.log("No actors found in the 'Acting' department.");
     }
     film.director = directors;
-
-
-
-    console.log('Director is: ' + film.director[0].name);
-
-
-
     console.log('film is: ', film);
 
   } catch (error) {
@@ -197,8 +183,6 @@ export function searchFilms(input) {
 }
 
 export async function getFilm(filmId) {
-  console.log('film id is:' + filmId);
   await fetchCardById(filmId);
-  console.log('film is here: ' + film)
   return film;
 }

@@ -29,14 +29,6 @@ function renderLogo(eventName) {
     }
 
     elements[eventName] = $(createLogo(eventName));
-
-    /* elements[eventName].on('click', () => {
-
-        elements.app.find('#buttonsSection').empty();
-        window.location.hash = "home";
-        
-
-    }) */
     elements.app.find('#homeMenu').prepend(elements[eventName])
 }
 
@@ -74,7 +66,7 @@ function renderHomeMenu() {
 export function render() {
     elements.app = $("#app");
     //elements.app.empty();
-    console.log('asdfasdf')
+    elements['Instructions'].remove();
     renderHomeMenu();
     renderLogo();
     renderStartButton("Start Game");

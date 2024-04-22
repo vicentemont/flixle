@@ -16,11 +16,8 @@ let correctAnswer;
 
 export let getNewCorrectAnswer = async function () {
   if (!correctAnswer) {
-    console.log('correct answer updated')
     correctAnswer = await getRandomMovie();
   }
-  console.log('correct answer exists')
-  console.log('correct answer is: ' + correctAnswer.title);
 }
 // a function to create a single button with some inner text
 function createInput() {
@@ -99,7 +96,6 @@ function compare(param, param1, title) {
     });
 
     if (param.id === actorWithHighestPopularity.id) {
-      console.log("entered Equal")
       return `
           <div id="${title}" class="movieDetail" style="background-color: #1ed760d9; ${dynamicFontSize(param.name.length+15)}"> 
               <p class="squareName">M.P.ACTOR</p>
@@ -125,7 +121,6 @@ function compare(param, param1, title) {
           </div>`;
     }
   } else if (Array.isArray(param)) {
-    console.log(param, param1);
     const paramIds = param.map(item => item.id);
     const param1Ids = param1.map(item => item.id);
 
@@ -332,7 +327,6 @@ function renderSearchBar(eventName) {
     // Check if the key pressed is Enter (key code 13)
     if (event.which === 13) {
       try {
-        console.log('HERE' + event.target.value)
 
         render(getFilm(suggestions[0].id));
 
@@ -349,24 +343,19 @@ function renderSearchBar(eventName) {
 // an exposed function for the service to give us a handler function to bind to an event
 export function bind(eventName, handler) {
   handlers[eventName] = handler;
-  console.log(handlers);
 }
 
 // the render function, which will trigger the rendering of the button firstly
 // in this version, this is the function where one decides what will be rendered
 export async function render(data) {
   elements.app = $("#app");
-  console.log(elements)
   renderSearchBar("searchFilms");
   if (!data) {
-    console.log('data is: ' + data)
     return;
   } else if (Array.isArray(data)) {
-    console.log('data1 is: ' + data);
     const resolvedData = await Promise.all(data); // Wait for all promises to resolve
     renderSuggestions(resolvedData);
   } else {
-    console.log('data2 is: ' + data);
     const resolvedData = await data; // Wait for the single promise to resolve
     renderFilm(resolvedData);
   }
