@@ -19,7 +19,7 @@ function createLogo() {
 }
 
 function createInstructions() {
-    return `<img src="Instructions.png" style="width:700px" alt="">
+    return `<img id="instructions" src="Instructions.png" style="width:700px" alt="">
     `
 }
 
