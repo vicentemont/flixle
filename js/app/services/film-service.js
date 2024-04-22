@@ -1,19 +1,6 @@
-const webpack = require('webpack');
-require('dotenv').config();  // Load your environment variables from .env file
 
-module.exports = {
-  // Other Webpack configuration
-  plugins: [
-    new webpack.DefinePlugin({
-      'process.env.API_KEY': JSON.stringify(process.env.API_KEY),
-    }),
-  ],
-};
+const apiKey = "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI1NmQ3YzI2ZjFjMzRmZjA1OTg2NWI3YjY2OTFmMWRmYyIsInN1YiI6IjY2MTljZTIwNjllYjkwMDE2M2I3NTgyMCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.sjdfZEmPvZQTV3kKlkCwFlN0UrN-q96L_cgzDDXpn-I";
 
-
-const apiKey = process.env.API_KEY;
-
-console.log("The API key is:", apiKey);  // It should match the secret
 
 
 let film;
