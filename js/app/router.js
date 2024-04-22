@@ -34,6 +34,6 @@ async function loadController(controllerName) {
 // start the router setting and loading the default router.
 export function start() {
   location.hash = routes[defaultRoute].hash;
-  //loadController(routes[defaultRoute].controller);
+  loadController(routes[defaultRoute].controller);
 
 }

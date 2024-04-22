@@ -50,6 +50,9 @@ function renderStartButton(eventName) {
 }
 
 function renderInstructions(eventName) {
+    if (elements[eventName]) {
+        return;
+    }
     elements[eventName] = $(createInstructions());
     elements.app.find('#homeMenu').append(elements[eventName])
 }
@@ -57,6 +60,7 @@ function renderInstructions(eventName) {
 function renderHomeMenu() {
     //
     const menu = createHomeMenu();
+   
     elements.menu = $(menu);
     elements.app.append(menu);
 
