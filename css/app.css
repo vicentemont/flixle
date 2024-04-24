@@ -8,12 +8,154 @@
 }
 
 footer {
-    margin-top: 25px;  /* Spacing between content and footer */
-    color: white;  /* Text color */
-    position: sticky;  /* Sticky position keeps the element in view */
-    bottom: 0px;  /* Stays 5 pixels from the bottom of the viewport */
-    z-index: 1;  /* Ensures the footer is above other content when scrolling */
-    background-color: #202020;  /* Background color for the footer */
-    text-align: center;  /* Center text in the footer */
-    padding: 10px;  /* Padding for a more comfortable look */
+    margin-top: 25px;
+    /* Spacing between content and footer */
+    color: white;
+    /* Text color */
+    position: sticky;
+    /* Sticky position keeps the element in view */
+    bottom: 0px;
+    /* Stays 5 pixels from the bottom of the viewport */
+    z-index: 1;
+    /* Ensures the footer is above other content when scrolling */
+    background-color: #202020;
+    /* Background color for the footer */
+    text-align: center;
+    /* Center text in the footer */
+    padding: 10px;
+    /* Padding for a more comfortable look */
+}
+
+#side-menu-container {
+    top: 20px;
+    right: 20px;
+    position: fixed;
+    background-color: white;
+    border-radius: 50px;
+    width: 40px;
+    z-index: 1;
+
+}
+
+#side-menu-button {
+    background: linear-gradient(141deg, rgba(131, 58, 180, 1) 0%, rgba(253, 29, 29, 1) 75%, rgba(252, 176, 69, 1) 100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #ffffff;
+    width: 40px;
+    height: 40px;
+    border-radius: 50px;
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.3);
+
+}
+
+#side-menu-button:hover {
+    filter: brightness(150%);
+}
+
+
+#quit-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #202020;
+    width: 40px;
+    height: 40px;
+    border-radius: 50px;
+}
+
+#quit-button:hover {
+    color: #2020206d;
+
+}
+
+@keyframes slideUpCard {
+    from {
+        top:100%;
+    }
+
+    to {
+        top:50%;
+    }
+}
+
+@keyframes slideDownCard {
+    from {
+        top:50%;
+    }
+
+    to {
+        top:100%;
+    }
+}
+
+.confirmation-card-container {
+    display: flex;
+    justify-content: start;
+    flex-direction: column;
+    align-items: center;
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+    border-radius: 25px;
+    background-color: white;
+    padding-bottom: 20px ;
+    width: 300px;
+    overflow: hidden;
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.3);
+    animation: slideUpCard 0.2s ease-in-out;
+}
+
+/* Additional class to trigger the reverse animation */
+.slide-down {
+    animation: slideDownCard 0.2s ease-in-out;
+  }
+#confirmation-card-title {
+    padding: 10px;
+    font-size: large;
+    color: #ffffff;
+    text-align: center;
+    background: linear-gradient(141deg, rgba(131, 58, 180, 1) 0%, rgba(253, 29, 29, 1) 75%, rgba(252, 176, 69, 1) 100%);
+    width: 100%;
+    height: 45px;
+}
+
+#confirmation-card-text {
+    text-align: center;
+    padding: 20px;
+}
+
+#confirm-btn{
+    background-color: #1ed760d9;
+    padding: 10px;
+    padding-left: 15px;
+    padding-right: 15px;
+    border-radius: 30px;
+    width: 200px;
+    margin-bottom: 10px;
+    text-align: center;
+    box-shadow: 0 3px 3px rgba(0, 0, 0, 0.3);
+
+}
+#disregard-btn{
+    background-color: rgba(255, 0, 0, 0.8);
+    padding: 10px;
+    padding-left: 15px;
+    padding-right: 15px;
+    border-radius: 30px;
+    width: 200px;
+    text-align: center;
+    box-shadow: 0 3px 3px rgba(0, 0, 0, 0.3);
+
+}
+
+#confirm-btn:hover {
+    filter: brightness(130%);
+}
+
+#disregard-btn:hover {
+    filter: brightness(130%);
 }

@@ -628,7 +628,170 @@ textarea {
 }
 
 @media (max-width: 600px) {
+    .gameCardContainer.container {
+        display: block;
+        /* Ensure container size fits its content */
+        border-radius: 30px;
+        /* Apply border radius */
+        overflow: hidden;
+        /* Ensure child elements don't overflow */
+        width: 300px;
+        border-style: none;
+        border-color: white;
+        padding: 5px;
+        box-shadow: 0px 0px 10px rgb(255, 255, 255);
+        background: linear-gradient(var(--rotate), rgba(131, 58, 180, 1) 0%, rgba(253, 29, 29, 1) 50%, rgba(252, 176, 69, 1) 100%);
+        backdrop-filter: blur(50px);
     
+        animation:
+            slideDownHalfSize 0.2s ease-in-out,
+            /* Then, scale up after 1-second delay */
+            spin 4s linear infinite
+    }
+    
+    
+    
+    
+    
+    
+    #gameCard {
+        background-color: rgba(255, 0, 0, 0.5);
+        width: 100%;
+        padding: 20px;
+    
+        border-radius: 25px;
+        /* Apply border radius */
+        background-position: center;
+        border-width: 4px;
+    
+    }
+  
+       
+    #movieTitle {
+        height: 90px;
+        border-radius: 15px;
+        border-width: 2px;
+        border-style: none;
+        border-color: rgb(0, 0, 0);
+        box-shadow: 0 4px 4px rgba(0, 0, 0, 0.3);
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        justify-content: flex-start;
+        align-items: center;
+        color: rgb(255, 255, 255);
+        overflow: hidden;
+        overflow: hidden;
+    
+    }
+    
+    #movieTitle img {
+        width: 80px;
+        height: 100%;
+        border-radius: 5px 5px 0px 0px 0px;
+        object-fit: cover;
+        box-shadow: 0 4px 4px rgba(0, 0, 0, 0.3);
+    }
+    
+    #movieTitle div {
+        height: 100%;
+        width: 100%;
+        border-end-end-radius: 5px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: rgba(255, 255, 255, 0.788);
+    }
+    
+    #movieTitle h3 {
+        color: #000;
+        font-size: large;
+        font-weight: bold;
+        max-width: 160px;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 3;
+        margin-bottom: 0px;
+    }
+    
+    #movieDetails {
+    
+        display: grid;
+        grid-template-columns: repeat(12, 1fr);
+        grid-auto-rows: 80px;
+        padding-top: 10px;
+        gap: 5px;
+        font-size: medium;
+        font-weight: bold;
+    
+    }
+    
+    #DIRECTOR {
+        font-size: medium;
+        grid-column: span 8;
+        width: 165px;
+        overflow: hidden;
+        padding-right: 10px;
+        padding-left: 10px;
+    }
+    
+    #GENRES {
+        grid-column: span 8;
+        width: 165px;
+        overflow: hidden;
+        padding-right: 10px;
+        padding-left: 10px;
+    }
+    
+    #LANGUAGE {
+        overflow: hidden;
+    }
+    
+    #ACTOR {
+    
+        padding-right: 10px;
+        padding-left: 10px;
+    }
+    
+    .movieDetail {
+        backdrop-filter: blur(1px);
+        grid-column: span 4;
+        border-width: 2px;
+        background-color: rgba(255, 255, 255, 0.788);
+        border-style: none;
+        border-color: white;
+        border-radius: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        box-shadow: 0 4px 4px rgba(0, 0, 0, 0.3);
+        height: 80px;
+        width: 80px;
+        /* Adjust width to fit within container */
+        /* Add margin between items */
+        /* Add margin between rows */
+        text-align: center;
+    
+    }
+    
+    .movieDetail div img {
+        height: 28px;
+        width: 38px;
+        object-fit: cover;
+    }
+    
+    .squareName {
+        align-self: flex-start;
+        text-align: center;
+        padding-top: 5px;
+        font-size: 9px;
+        font-weight: bold;
+        margin: 0%;
+        position: absolute;
+    
+    }
 
     #instructions {
         margin-top: 30px;
@@ -638,3 +801,6 @@ textarea {
         /* Reduce the max width */
     }
 }
+
+
+

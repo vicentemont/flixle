@@ -9,6 +9,8 @@ const handlers = {};
 
 let tryCounter = 0;
 
+let menuOpen = false;
+
 let gameWon = false;
 
 // define the correct answer to win the game
@@ -24,7 +26,53 @@ function createInput() {
   return `<div id="searchSection" class="container"><input autocomplete="off" type="search" id="searchBar" class="container" placeholder="Search movie..."></div>`;
 }
 
+function createQuitButton() {
+  return `<div id="quit-button-container"><div id="quit-button"><i class="fa-solid fa-flag"></i></div></div> `
+}
+function createSideMenu() {
+  return `<div id="side-menu-container"><div id="side-menu-button"><i class="fa-solid fa-bars"></i></div></div> `
+}
 
+function createConfimationButton(text,id){
+  return `<div id="${id}">${text}</div>`
+}
+
+function createConfirmationCard(title, text){
+  return `
+  <div class="confirmation-card-container">
+  <div id="confirmation-card-title">${title}</div>
+  <div id="confirmation-card-text">${text}</div>
+  <div id="confirmation-card-btn-container">
+  </div>
+  </div>
+  `
+}
+
+function renderConfirmationCard(eventName){
+  if (elements[eventName] || guesses.length<1) {
+    return;
+  }
+  elements[eventName] = $(createConfirmationCard("Surrender?","Do you really wish to know the correct movie?"));
+
+  elements.app.append(elements[eventName]);
+  elements["confirm-button"] = $(createConfimationButton("Yes, I quit!", "confirm-btn"));
+  elements["disregard-button"] = $(createConfimationButton("No, go back!", "disregard-btn"))
+
+  elements["confirm-button"].on('click', () => {
+    gameWon =true;
+    render(correctAnswer);
+    elements[eventName].remove();
+    delete elements[eventName];
+  })
+
+  elements["disregard-button"].on('click', () => {
+    elements[eventName].remove();
+    delete elements[eventName];
+  })
+
+  elements[eventName].append(elements["confirm-button"]);
+  elements[eventName].append(elements["disregard-button"]);
+}
 function createScoreCounter() {
   return `<div id="counter">
   <p >Number of tries: ${tryCounter}
@@ -262,7 +310,7 @@ function createSuggestions(suggestionsObj) {
     }
 
     function checkIfItsBeenUsed(elementId) {
-      if(alreadyUsed.some(item => item.id === elementId)){
+      if (alreadyUsed.some(item => item.id === elementId)) {
         return `<span style="color: green;">&#10003;  </span>`
       } else {
         return ``;
@@ -278,6 +326,54 @@ function createSuggestions(suggestionsObj) {
   } else {
     return '';
   }
+}
+
+function renderQuitButton(eventName) {
+  if (elements[eventName]) {
+
+    return;
+  }
+  elements[eventName] = $(createQuitButton());
+
+  elements[eventName].on('click', () => {
+    if(gameWon){
+      return;
+    } else {
+      renderConfirmationCard("confirmation-card");
+      
+    }
+    
+  })
+
+  // checking if the element already exists OR if there is no handler with that name (just because I don't want to render a button without a handler)
+
+
+  elements.app.find("#side-menu-container").append(elements[eventName]);
+
+}
+
+function renderSideMenu(eventName) {
+  if (elements[eventName]) {
+
+    return;
+  }
+  elements[eventName] = $(createSideMenu());
+
+  // checking if the element already exists OR if there is no handler with that name (just because I don't want to render a button without a handler)
+
+
+  elements.app.prepend(elements[eventName]);
+  elements[eventName].on('click', () => {
+    if (menuOpen) {
+      menuOpen = false;
+      delete elements["quit-button"];
+      elements.app.find("#quit-button").remove();
+    } else {
+      menuOpen = true;
+      renderQuitButton("quit-button");
+    }
+  })
+
 }
 
 
@@ -309,6 +405,7 @@ function renderSuggestions(suggestionsObj) {
     // Remove existing suggestions
     elements.app.find('#suggestionsContainer').empty();
 
+
     // Trigger a search based on the clicked suggestion
     // Assuming you have a function to handle the search
     //handlers.getFilm(suggestionId);
@@ -320,6 +417,7 @@ function renderSuggestions(suggestionsObj) {
   });
   elements.app.find('#searchBar').nextAll().remove();
   elements.app.find('#searchSection').append(elements.suggestions);
+
 
 }
 
@@ -378,6 +476,8 @@ export function bind(eventName, handler) {
 export async function render(data) {
   elements.app = $("#app");
   renderSearchBar("searchFilms");
+  renderSideMenu("sideMenu");
+
   if (!data) {
     return;
   } else if (Array.isArray(data)) {

@@ -70,7 +70,7 @@ function renderHomeMenu() {
 export function render() {
     elements.app = $("#app");
     renderHomeMenu();
-    renderLogo();
+    renderLogo("logo");
     renderStartButton("Start Game");
     renderInstructions("Instructions");
 
