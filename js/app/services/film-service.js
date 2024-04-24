@@ -12,6 +12,8 @@ let film;
 },
  */
 
+export let guesses = [];
+
 async function getCredits(id) {
   const options = {
     method: 'GET',

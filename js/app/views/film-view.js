@@ -1,7 +1,7 @@
 // the point of separating elements from their handlers is flexibility
 // I may want elements without any handling functions
 
-import { getFilm, searchFilms, getRandomMovie } from "../services/film-service.js";
+import { getFilm, searchFilms, getRandomMovie, guesses } from "../services/film-service.js";
 
 // and I may want handlers that are shared by multiple elements
 const elements = {};
@@ -97,7 +97,7 @@ function compare(param, param1, title) {
 
     if (param.id === actorWithHighestPopularity.id) {
       return `
-          <div id="${title}" class="movieDetail" style="background-color: #1ed760d9; ${dynamicFontSize(param.name.length+15)}"> 
+          <div id="${title}" class="movieDetail" style="background-color: #1ed760d9; ${dynamicFontSize(param.name.length + 15)}"> 
               <p class="squareName">M.P.ACTOR</p>
               <div>
                   <span>${param.name.toUpperCase()} </span>
@@ -105,7 +105,7 @@ function compare(param, param1, title) {
           </div>`;
     } else if (actorsIds.includes(param.id)) {
       return `
-      <div id="${title}" class="movieDetail" style="background-color: #ffa500d6; ${dynamicFontSize(param.name.length+15)}"> 
+      <div id="${title}" class="movieDetail" style="background-color: #ffa500d6; ${dynamicFontSize(param.name.length + 15)}"> 
           <p class="squareName">M.P.ACTOR</p>
           <div>
               <span>${param.name.toUpperCase()} </span>
@@ -113,7 +113,7 @@ function compare(param, param1, title) {
       </div>`
     } else {
       return `
-          <div id="${title}" class="movieDetail" style="background-color: rgba(255, 0, 0, 0.8); ${dynamicFontSize(param.name.length+15)}"> 
+          <div id="${title}" class="movieDetail" style="background-color: rgba(255, 0, 0, 0.8); ${dynamicFontSize(param.name.length + 15)}"> 
               <p class="squareName">M.P.ACTOR</p>
               <div>
                   <span>${param.name.toUpperCase()} </span>
@@ -246,22 +246,48 @@ function createFilmCard({ id, title, popularity, genres, budget, actors, revenue
 // gets a JSON obj and creates suggestions below searchBar
 function createSuggestions(suggestionsObj) {
   if (suggestionsObj) {
-    console.log('here: ' + suggestionsObj[0].Title);
-    const suggestions = suggestionsObj.map(element =>
-      `<div class=" suggestion" movieid="${element.id}">${element.Title}</div>`).join('');
+    // Convert the nested objects in suggestionsObj into an array
+    const suggestionsArray = Object.values(suggestionsObj);
+
+    // Find all suggestions that have matching IDs in guesses
+    let alreadyUsed = suggestionsArray.filter(suggestion =>
+      guesses.some(guess => guess.id === suggestion.id)
+    );
+
+    // Check if there are any objects with matching IDs
+    if (alreadyUsed.length > 0) {
+      console.log("An object with a matching ID was already searched.", alreadyUsed);
+    } else {
+      console.log("No object with a matching ID found.");
+    }
+
+    function checkIfItsBeenUsed(elementId) {
+      if(alreadyUsed.some(item => item.id === elementId)){
+        return `<span style="color: green;">&#10003;  </span>`
+      } else {
+        return ``;
+      }
+    }
+
+    // Generate the suggestions as HTML
+    const suggestions = suggestionsArray.map(suggestion =>
+      `<div class="suggestion" movieid="${suggestion.id}">${checkIfItsBeenUsed(suggestion.id)}${suggestion.Title}</div>`
+    ).join('');
+
     return `<div id="suggestionsContainer">${suggestions}</div>`;
   } else {
-    return
+    return '';
   }
 }
 
+
 // adds EventListener to each suggestion to search when clicked by user
 function renderSuggestions(suggestionsObj) {
-  
+
   const suggestions = createSuggestions(suggestionsObj);
   elements.suggestions = $(suggestions);
 
-  elements.suggestions.on('click', function (event) {
+  elements.suggestions.on('click', async function (event) {
     // Get the text of the clicked suggestion
     const suggestionText = $(event.target).text();
     const suggestionId = $(event.target).attr('movieid');
@@ -286,8 +312,10 @@ function renderSuggestions(suggestionsObj) {
     // Trigger a search based on the clicked suggestion
     // Assuming you have a function to handle the search
     //handlers.getFilm(suggestionId);
-
-    render(getFilm(suggestionId));
+    let movie = await getFilm(suggestionId);
+    guesses.push(movie);
+    console.log("guesses so far: ", guesses);
+    render(movie);
 
   });
   elements.app.find('#searchBar').nextAll().remove();
@@ -303,7 +331,7 @@ function renderFilm(film) {
 
 // adds EventListeners to searchBar element
 function renderSearchBar(eventName) {
-  
+
   // checking if the element already exists OR if there is no handler with that name (just because I don't want to render a button without a handler)
   if (elements[eventName] || !handlers[eventName]) {
     return;
