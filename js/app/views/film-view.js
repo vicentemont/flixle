@@ -13,6 +13,7 @@ let menuOpen = false;
 
 let gameWon = false;
 
+
 // define the correct answer to win the game
 let correctAnswer;
 
@@ -27,10 +28,14 @@ function createInput() {
 }
 
 function createQuitButton() {
-  return `<div id="quit-button-container"><div id="quit-button"><i class="fa-solid fa-flag"></i></div></div> `
+  return `<div id="quit-button-container"><div id="quit-button"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="-5.0 -10.0 110.0 135.0">
+  <path d="m88.891 55c1.3906 1.668 1.668 3.8906 0.55469 5.832-0.83203 1.9453-2.7773 3.0547-5 3.0547l-68.891 0.003906v30.555c0 1.3906-1.3906 2.7773-2.7773 2.7773-1.3906 0-2.7773-1.3906-2.7773-2.7773v-88.891c0-1.3906 1.3906-2.7773 2.7773-2.7773h71.945c2.2227 0 4.168 1.1094 5 3.0547 0.83203 1.9453 0.55469 4.168-0.55469 5.832l-17.5 21.668z"/>
+ </svg></div></div> `
 }
 function createSideMenu() {
-  return `<div id="side-menu-container"><div id="side-menu-button"><i class="fa-solid fa-bars"></i></div></div> `
+  return `<div id="side-menu-container"><div id="side-menu-button"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="-5.0 -10.0 110.0 135.0">
+  <path d="m12.5 25c0-3.4531 2.7969-6.25 6.25-6.25h62.5c3.4531 0 6.25 2.7969 6.25 6.25s-2.7969 6.25-6.25 6.25h-62.5c-3.4531 0-6.25-2.7969-6.25-6.25zm68.75 18.75h-62.5c-3.4531 0-6.25 2.7969-6.25 6.25s2.7969 6.25 6.25 6.25h62.5c3.4531 0 6.25-2.7969 6.25-6.25s-2.7969-6.25-6.25-6.25zm0 25h-62.5c-3.4531 0-6.25 2.7969-6.25 6.25s2.7969 6.25 6.25 6.25h62.5c3.4531 0 6.25-2.7969 6.25-6.25s-2.7969-6.25-6.25-6.25z"/>
+ </svg></div></div> `
 }
 
 function createConfimationButton(text,id){

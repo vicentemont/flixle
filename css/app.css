@@ -50,10 +50,21 @@ footer {
 
 }
 
+#side-menu-button svg {
+ margin-top: 4px;
+ width: 25px;
+ fill: #202020;
+}
+
 #side-menu-button:hover {
     filter: brightness(150%);
 }
 
+#quit-button svg {
+    width: 22px;
+    margin-left: 2px;
+   fill: #202020;
+}
 
 #quit-button {
     display: flex;
@@ -65,8 +76,8 @@ footer {
     border-radius: 50px;
 }
 
-#quit-button:hover {
-    color: #2020206d;
+#quit-button svg:hover {
+    fill: #20202091;
 
 }
 
