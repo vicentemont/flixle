@@ -27,8 +27,8 @@ footer {
 }
 
 #side-menu-container {
-    top: 20px;
-    right: 20px;
+    top: 40px;
+    right: 40px;
     position: fixed;
     background-color: white;
     border-radius: 50px;
