@@ -1,6 +1,6 @@
 // the point of separating elements from their handlers is flexibility
 // I may want elements without any handling functions
-
+import { persistAnswer, getCurrentAnswer } from "../services/firebase.js";
 import { getFilm, searchFilms, getRandomMovie, guesses } from "../services/film-service.js";
 
 // and I may want handlers that are shared by multiple elements
@@ -17,11 +17,27 @@ let gameWon = false;
 // define the correct answer to win the game
 let correctAnswer;
 
-export let getNewCorrectAnswer = async function () {
-  if (!correctAnswer) {
-    correctAnswer = await getRandomMovie();
+export let getCorrectAnswer = async function () {
+  try {
+    // Get the current answer asynchronously
+    const currentAnswer = await getCurrentAnswer();
+
+    if (!currentAnswer) {  // If it's null or undefined, generate a new answer
+      console.log("No current answer found. Generating a new correct answer...");
+      correctAnswer = await getRandomMovie();  // Generate a new correct answer
+      persistAnswer(correctAnswer);  // Persist the new correct answer
+    } else {
+      console.log("Current answer found:", currentAnswer);
+      correctAnswer = currentAnswer;  // Use the current answer
+    }
+
+    return correctAnswer;  // Return the correct answer (new or existing)
+  } catch (e) {
+    console.error("Error in getCorrectAnswer:", e);
+    throw e;  // Re-throw the error for handling in calling functions
   }
-}
+};
+
 // a function to create a single button with some inner text
 function createInput() {
   return `<div id="searchSection" class="container"><input autocomplete="off" type="search" id="searchBar" class="container" placeholder="Search movie..."></div>`;
@@ -38,11 +54,11 @@ function createSideMenu() {
  </svg></div></div> `
 }
 
-function createConfimationButton(text,id){
+function createConfimationButton(text, id) {
   return `<div id="${id}">${text}</div>`
 }
 
-function createConfirmationCard(title, text){
+function createConfirmationCard(title, text) {
   return `
   <div class="confirmation-card-container">
   <div id="confirmation-card-title">${title}</div>
@@ -53,18 +69,18 @@ function createConfirmationCard(title, text){
   `
 }
 
-function renderConfirmationCard(eventName){
-  if (elements[eventName] || guesses.length<1) {
+function renderConfirmationCard(eventName) {
+  if (elements[eventName] || guesses.length < 1) {
     return;
   }
-  elements[eventName] = $(createConfirmationCard("Surrender?","Do you really wish to know the correct movie?"));
+  elements[eventName] = $(createConfirmationCard("Surrender?", "Do you really wish to know the correct movie?"));
 
   elements.app.append(elements[eventName]);
   elements["confirm-button"] = $(createConfimationButton("Yes, I quit!", "confirm-btn"));
   elements["disregard-button"] = $(createConfimationButton("No, go back!", "disregard-btn"))
 
   elements["confirm-button"].on('click', () => {
-    gameWon =true;
+    gameWon = true;
     render(correctAnswer);
     elements[eventName].remove();
     delete elements[eventName];
@@ -341,13 +357,13 @@ function renderQuitButton(eventName) {
   elements[eventName] = $(createQuitButton());
 
   elements[eventName].on('click', () => {
-    if(gameWon){
+    if (gameWon) {
       return;
     } else {
       renderConfirmationCard("confirmation-card");
-      
+
     }
-    
+
   })
 
   // checking if the element already exists OR if there is no handler with that name (just because I don't want to render a button without a handler)

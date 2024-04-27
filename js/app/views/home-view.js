@@ -1,4 +1,4 @@
-import { getNewCorrectAnswer } from "./film-view.js";
+import { getCorrectAnswer } from "./film-view.js";
 const elements = {};
 const handlers = {};
 
@@ -39,7 +39,7 @@ function renderStartButton(eventName) {
     elements[eventName] = $(createStartButton(eventName));
 
     elements[eventName].on('click', () => {
-        getNewCorrectAnswer();
+        getCorrectAnswer();
         elements.app.find('#buttonsSection').empty();
         elements['Instructions'].remove();
 
@@ -60,7 +60,7 @@ function renderInstructions(eventName) {
 function renderHomeMenu() {
     //
     const menu = createHomeMenu();
-   
+
     elements.menu = $(menu);
     elements.app.append(menu);
 

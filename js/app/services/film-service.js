@@ -1,17 +1,12 @@
 
+
 const apiKey = "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI1NmQ3YzI2ZjFjMzRmZjA1OTg2NWI3YjY2OTFmMWRmYyIsInN1YiI6IjY2MTljZTIwNjllYjkwMDE2M2I3NTgyMCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.sjdfZEmPvZQTV3kKlkCwFlN0UrN-q96L_cgzDDXpn-I";
 
 
 
 
 let film;
-/* {
-  title: "Star Wars",
-  year: 1977,
-  director: "George Lucas",
-  imdbRating: 8.6,
-},
- */
+
 
 export let guesses = [];
 
@@ -75,7 +70,6 @@ export async function getRandomMovie() {
       console.log("No actors found in the 'Acting' department.");
     }
     output.director = directors;
-
 
 
     return output;
