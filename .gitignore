@@ -1,2 +1,3 @@
 js/app/apiKeys.js
 .env
+node_modules/
