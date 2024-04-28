@@ -13,28 +13,46 @@ let menuOpen = false;
 
 let gameWon = false;
 
+let playLimitless = true;
+
 
 // define the correct answer to win the game
 let correctAnswer;
 
 export let getCorrectAnswer = async function () {
-  try {
-    // Get the current answer asynchronously
-    const currentAnswer = await getCurrentAnswer();
+  if (playLimitless) {
+    try {
+      if (!correctAnswer) {  // If it's null or undefined, generate a new answer
+        correctAnswer = await getRandomMovie();  // Generate a new correct answer
+        return correctAnswer;  // Use the current answer
 
-    if (!currentAnswer) {  // If it's null or undefined, generate a new answer
-      console.log("No current answer found. Generating a new correct answer...");
-      correctAnswer = await getRandomMovie();  // Generate a new correct answer
-      persistAnswer(correctAnswer);  // Persist the new correct answer
-    } else {
-      console.log("Current answer found:", currentAnswer);
-      correctAnswer = currentAnswer;  // Use the current answer
+      } else {
+        return correctAnswer;  // Use the current answer
+      }
+
+    } catch (e) {
+      console.error("Error in getCorrectAnswer:", e);
+      throw e;  // Re-throw the error for handling in calling functions
     }
+  } else {
+    try {
+      // Get the current answer asynchronously
+      const currentAnswer = await getCurrentAnswer();
 
-    return correctAnswer;  // Return the correct answer (new or existing)
-  } catch (e) {
-    console.error("Error in getCorrectAnswer:", e);
-    throw e;  // Re-throw the error for handling in calling functions
+      if (!currentAnswer) {  // If it's null or undefined, generate a new answer
+        console.log("No current answer found. Generating a new correct answer...");
+        correctAnswer = await getRandomMovie();  // Generate a new correct answer
+        persistAnswer(correctAnswer);  // Persist the new correct answer
+      } else {
+        console.log("Current answer found:", currentAnswer);
+        correctAnswer = currentAnswer;  // Use the current answer
+      }
+
+      return correctAnswer;  // Return the correct answer (new or existing)
+    } catch (e) {
+      console.error("Error in getCorrectAnswer:", e);
+      throw e;  // Re-throw the error for handling in calling functions
+    }
   }
 };
 
