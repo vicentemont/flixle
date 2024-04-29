@@ -12,6 +12,40 @@ let autoCompleteSuggestions = [];
 
 
 
+// Function to get the time remaining until the end of the day
+function getTimeRemaining() {
+  // Get current time
+  const now = new Date();
+  
+  // Get end of the day (midnight)
+  const endOfDay = new Date(now);
+  endOfDay.setHours(23, 59, 59, 999); // Set to midnight (23:59:59.999)
+  
+  // Calculate time difference in milliseconds
+  const timeDifference = endOfDay - now;
+
+  // Convert milliseconds to hours, minutes, and seconds
+  const hours = Math.floor(timeDifference / (1000 * 60 * 60));
+  const minutes = Math.floor((timeDifference / (1000 * 60)) % 60);
+  const seconds = Math.floor((timeDifference / 1000) % 60);
+
+  return { hours, minutes, seconds };
+}
+
+// Function to update the timer display
+function updateTimer() {
+  const timerElement = document.getElementById("timer");
+  const timeRemaining = getTimeRemaining();
+
+  timerElement.innerHTML = `${timeRemaining.hours}h ${timeRemaining.minutes}m ${timeRemaining.seconds}s`;
+}
+
+// Initialize the timer with a 1-second interval
+function startTimer() {
+  updateTimer(); // Initial update
+  setInterval(updateTimer, 1000); // Update every second
+}
+
 
 
 async function getCredits(id) {
@@ -39,8 +73,7 @@ async function getCredits(id) {
   }
 }
 
-
-export async function getRandomMovie() {
+async function getRandomMovie() {
 
   const api = `https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&page=1&sort_by=vote_count.asc&vote_average.gte=${(Math.random() * 2) + 6}&vote_count.gte=${Math.floor(Math.random() * (35000 - 2000 + 1)) + 5000}`;
 
@@ -91,9 +124,6 @@ export async function getRandomMovie() {
 
 
 }
-
-
-
 
 async function fetchCardSearch(searchTerm) {
   const api = `https://api.themoviedb.org/3/search/movie?query=${searchTerm}&include_adult=false&language=en-US&page=1'`;
@@ -197,6 +227,7 @@ async function fetchCardById(id) {
 }
 
 
+export { getRandomMovie, startTimer }
 
 export function searchFilms(input) {
   fetchCardSearch(input);

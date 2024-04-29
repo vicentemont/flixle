@@ -1,7 +1,7 @@
 // the point of separating elements from their handlers is flexibility
 // I may want elements without any handling functions
 import { persistAnswer, getCurrentAnswer, today, isSameDay } from "../services/firebase.js";
-import { getFilm, searchFilms, getRandomMovie } from "../services/film-service.js";
+import { getFilm, searchFilms, getRandomMovie ,startTimer} from "../services/film-service.js";
 
 
 // and I may want handlers that are shared by multiple elements
@@ -19,7 +19,7 @@ let playLimitless = false;
 let menuOpen = false;
 let correctAnswer;
 
-export let displayConsoleLogs = false;
+let displayConsoleLogs = false;
 
 
 
@@ -60,130 +60,6 @@ function checkDay() {
   dayWasChecked = true;
 }
 
-
-export let getCorrectAnswer = async function () {
-  if (playLimitless) {
-    try {
-      if (!correctAnswer) {  // If it's null or undefined, generate a new answer
-        correctAnswer = await getRandomMovie();  // Generate a new correct answer
-        return correctAnswer;  // Use the current answer
-
-      } else {
-        return correctAnswer;  // Use the current answer
-      }
-
-    } catch (e) {
-      console.error("Error in getCorrectAnswer:", e);
-      throw e;  // Re-throw the error for handling in calling functions
-    }
-  } else {
-    try {
-      // Get the current answer asynchronously
-      const currentAnswer = await getCurrentAnswer();
-
-      if (!currentAnswer) {  // If it's null or undefined, generate a new answer
-        if (displayConsoleLogs) {
-          console.log("No current answer found. Generating a new correct answer...");
-        }
-
-        correctAnswer = await getRandomMovie();  // Generate a new correct answer
-        persistAnswer(correctAnswer);  // Persist the new correct answer
-      } else {
-        if (displayConsoleLogs) {
-          console.log("Current answer found:", currentAnswer);
-        }
-        correctAnswer = currentAnswer;  // Use the current answer
-      }
-
-      return correctAnswer;  // Return the correct answer (new or existing)
-    } catch (e) {
-      if (displayConsoleLogs) {
-        console.error("Error in getCorrectAnswer:", e);
-      }
-      throw e;  // Re-throw the error for handling in calling functions
-    }
-  }
-};
-
-// a function to create a single button with some inner text
-function createInput() {
-  return `<div id="searchSection" class="container"><input autocomplete="off" type="search" id="searchBar" class="container" placeholder="Search movie..."></div>`;
-}
-
-function createQuitButton() {
-  return `<div id="quit-button-container"><div id="quit-button"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="-5.0 -10.0 110.0 135.0">
-  <path d="m88.891 55c1.3906 1.668 1.668 3.8906 0.55469 5.832-0.83203 1.9453-2.7773 3.0547-5 3.0547l-68.891 0.003906v30.555c0 1.3906-1.3906 2.7773-2.7773 2.7773-1.3906 0-2.7773-1.3906-2.7773-2.7773v-88.891c0-1.3906 1.3906-2.7773 2.7773-2.7773h71.945c2.2227 0 4.168 1.1094 5 3.0547 0.83203 1.9453 0.55469 4.168-0.55469 5.832l-17.5 21.668z"/>
- </svg></div></div> `
-}
-function createSideMenu() {
-  return `<div id="side-menu-container"><div id="side-menu-button"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="-5.0 -10.0 110.0 135.0">
-  <path d="m12.5 25c0-3.4531 2.7969-6.25 6.25-6.25h62.5c3.4531 0 6.25 2.7969 6.25 6.25s-2.7969 6.25-6.25 6.25h-62.5c-3.4531 0-6.25-2.7969-6.25-6.25zm68.75 18.75h-62.5c-3.4531 0-6.25 2.7969-6.25 6.25s2.7969 6.25 6.25 6.25h62.5c3.4531 0 6.25-2.7969 6.25-6.25s-2.7969-6.25-6.25-6.25zm0 25h-62.5c-3.4531 0-6.25 2.7969-6.25 6.25s2.7969 6.25 6.25 6.25h62.5c3.4531 0 6.25-2.7969 6.25-6.25s-2.7969-6.25-6.25-6.25z"/>
- </svg></div></div> `
-}
-
-function createConfimationButton(text, id) {
-  return `<div id="${id}">${text}</div>`
-}
-
-function createConfirmationCard(title, text) {
-  return `
-  <div class="confirmation-card-container">
-  <div id="confirmation-card-title">${title}</div>
-  <div id="confirmation-card-text">${text}</div>
-  <div id="confirmation-card-btn-container">
-  </div>
-  </div>
-  `
-}
-
-
-
-function createWinScreen() {
-  elements['searchFilms'].remove();
-  delete elements.app.find('searchBar');
-}
-
-
-
-function renderConfirmationCard(eventName) {
-  if (elements[eventName] || localStorage.length < 1) {
-    return;
-  }
-  elements[eventName] = $(createConfirmationCard("Surrender?", "Do you really wish to know the correct movie?"));
-
-  elements.app.append(elements[eventName]);
-  elements["confirm-button"] = $(createConfimationButton("Yes, I quit!", "confirm-btn"));
-  elements["disregard-button"] = $(createConfimationButton("No, go back!", "disregard-btn"))
-
-  elements["confirm-button"].on('click', async () => {
-    increaseCounter();
-    gameWon = false;
-    gameOver = true;
-    localStorage.setItem('gameWon', 'false');
-    localStorage.setItem('gameOver', 'true');
-    addGuessToLocalStorage(correctAnswer.id);
-    await render(correctAnswer);
-    elements[eventName].remove();
-    delete elements[eventName];
-    createWinScreen();
-    renderGameOverCard('gameOverCard1', 'false', tryCounter);
-
-  })
-
-  elements["disregard-button"].on('click', () => {
-    elements[eventName].remove();
-    delete elements[eventName];
-  })
-
-  elements[eventName].append(elements["confirm-button"]);
-  elements[eventName].append(elements["disregard-button"]);
-}
-function createScoreCounter() {
-  return `<div id="counter">
-  <p >Number of tries: ${tryCounter}
-  </p>
-  </div>`
-}
 // check if string is from a country, to get the flag using country code (ex. GB, PT)
 function checkCountry(string, title) {
   if (title === 'COUNTRY') {
@@ -359,41 +235,114 @@ function compare(param, param1, title) {
 
 }
 
+function increaseCounter() {
+  tryCounter++;
 
-// Function to get the time remaining until the end of the day
-function getTimeRemaining() {
-  // Get current time
-  const now = new Date();
-  
-  // Get end of the day (midnight)
-  const endOfDay = new Date(now);
-  endOfDay.setHours(23, 59, 59, 999); // Set to midnight (23:59:59.999)
-  
-  // Calculate time difference in milliseconds
-  const timeDifference = endOfDay - now;
+  if (elements.counter) {
+    elements.counter.remove();
+  }
+  // Create the score counter element
+  elements.counter = $(createScoreCounter());
 
-  // Convert milliseconds to hours, minutes, and seconds
-  const hours = Math.floor(timeDifference / (1000 * 60 * 60));
-  const minutes = Math.floor((timeDifference / (1000 * 60)) % 60);
-  const seconds = Math.floor((timeDifference / 1000) % 60);
+  // Append the score counter after the #searchSection element
+  elements.app.find('#homeMenu').after(elements.counter);
 
-  return { hours, minutes, seconds };
 }
 
-// Function to update the timer display
-function updateTimer() {
-  const timerElement = document.getElementById("timer");
-  const timeRemaining = getTimeRemaining();
-
-  timerElement.innerHTML = `${timeRemaining.hours}h ${timeRemaining.minutes}m ${timeRemaining.seconds}s`;
+function addGuessToLocalStorage(movieId) {
+  guesses = JSON.parse(localStorage.getItem('guesses') || '[]');  // Default to an empty array if null
+  guesses.push(movieId);
+  localStorage.setItem('guesses', JSON.stringify(guesses));
+  localStorage.setItem('last play', new Date());
 }
 
-// Initialize the timer with a 1-second interval
-function startTimer() {
-  updateTimer(); // Initial update
-  setInterval(updateTimer, 1000); // Update every second
+async function getCorrectAnswer() {
+  if (playLimitless) {
+    try {
+      if (!correctAnswer) {  // If it's null or undefined, generate a new answer
+        correctAnswer = await getRandomMovie();  // Generate a new correct answer
+        return correctAnswer;  // Use the current answer
+
+      } else {
+        return correctAnswer;  // Use the current answer
+      }
+
+    } catch (e) {
+      console.error("Error in getCorrectAnswer:", e);
+      throw e;  // Re-throw the error for handling in calling functions
+    }
+  } else {
+    try {
+      // Get the current answer asynchronously
+      const currentAnswer = await getCurrentAnswer();
+
+      if (!currentAnswer) {  // If it's null or undefined, generate a new answer
+        if (displayConsoleLogs) {
+          console.log("No current answer found. Generating a new correct answer...");
+        }
+
+        correctAnswer = await getRandomMovie();  // Generate a new correct answer
+        persistAnswer(correctAnswer);  // Persist the new correct answer
+      } else {
+        if (displayConsoleLogs) {
+          console.log("Current answer found:", currentAnswer);
+        }
+        correctAnswer = currentAnswer;  // Use the current answer
+      }
+
+      return correctAnswer;  // Return the correct answer (new or existing)
+    } catch (e) {
+      if (displayConsoleLogs) {
+        console.error("Error in getCorrectAnswer:", e);
+      }
+      throw e;  // Re-throw the error for handling in calling functions
+    }
+  }
+};
+
+// a function to create a single button with some inner text
+function createInput() {
+  return `<div id="searchSection" class="container"><input autocomplete="off" type="search" id="searchBar" class="container" placeholder="Search movie..."></div>`;
 }
 
+function createQuitButton() {
+  return `<div id="quit-button-container"><div id="quit-button"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="-5.0 -10.0 110.0 135.0">
+  <path d="m88.891 55c1.3906 1.668 1.668 3.8906 0.55469 5.832-0.83203 1.9453-2.7773 3.0547-5 3.0547l-68.891 0.003906v30.555c0 1.3906-1.3906 2.7773-2.7773 2.7773-1.3906 0-2.7773-1.3906-2.7773-2.7773v-88.891c0-1.3906 1.3906-2.7773 2.7773-2.7773h71.945c2.2227 0 4.168 1.1094 5 3.0547 0.83203 1.9453 0.55469 4.168-0.55469 5.832l-17.5 21.668z"/>
+ </svg></div></div> `
+}
+
+function createSideMenu() {
+  return `<div id="side-menu-container"><div id="side-menu-button"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="-5.0 -10.0 110.0 135.0">
+  <path d="m12.5 25c0-3.4531 2.7969-6.25 6.25-6.25h62.5c3.4531 0 6.25 2.7969 6.25 6.25s-2.7969 6.25-6.25 6.25h-62.5c-3.4531 0-6.25-2.7969-6.25-6.25zm68.75 18.75h-62.5c-3.4531 0-6.25 2.7969-6.25 6.25s2.7969 6.25 6.25 6.25h62.5c3.4531 0 6.25-2.7969 6.25-6.25s-2.7969-6.25-6.25-6.25zm0 25h-62.5c-3.4531 0-6.25 2.7969-6.25 6.25s2.7969 6.25 6.25 6.25h62.5c3.4531 0 6.25-2.7969 6.25-6.25s-2.7969-6.25-6.25-6.25z"/>
+ </svg></div></div> `
+}
+
+function createConfimationButton(text, id) {
+  return `<div id="${id}">${text}</div>`
+}
+
+function createConfirmationCard(title, text) {
+  return `
+  <div class="confirmation-card-container">
+  <div id="confirmation-card-title">${title}</div>
+  <div id="confirmation-card-text">${text}</div>
+  <div id="confirmation-card-btn-container">
+  </div>
+  </div>
+  `
+}
+
+function createWinScreen() {
+  elements['searchFilms'].remove();
+  delete elements.app.find('searchBar');
+}
+
+function createScoreCounter() {
+  return `<div id="counter">
+  <p >Number of tries: ${tryCounter}
+  </p>
+  </div>`
+}
 
 function createGameOverCard(gameWinStatus, nrOfTries) {
   if (gameWinStatus === 'true') {
@@ -417,22 +366,6 @@ function createWhatsappBtn(nrOfTries, gameWinStatus) {
     </a>`
   }
 
-}
-
-function renderGameOverCard(eventName, gameWinStatus, nrOfTries) {
-  //console.log('entered renderGameOverCard')
-  // checking if the element already exists OR if there is no handler with that name (just because I don't want to render a button without a handler)
-  if (elements[eventName]) {
-    return;
-  }
-  elements[eventName] = $(createGameOverCard(gameWinStatus, nrOfTries))
-  
-  elements['whatsappBtn'] = $(createWhatsappBtn(nrOfTries, gameWinStatus))
-
-
-  elements.app.append(elements[eventName]);
-  elements.app.find('#game-over-card-btn-container').append(elements['whatsappBtn']);
-  startTimer();
 }
 
 // a function to create a film card, which is the html code for a single film
@@ -513,6 +446,59 @@ function createSuggestions(suggestionsObj) {
   }
 }
 
+
+
+
+function renderConfirmationCard(eventName) {
+  if (elements[eventName] || localStorage.length < 1) {
+    return;
+  }
+  elements[eventName] = $(createConfirmationCard("Surrender?", "Do you really wish to know the correct movie?"));
+
+  elements.app.append(elements[eventName]);
+  elements["confirm-button"] = $(createConfimationButton("Yes, I quit!", "confirm-btn"));
+  elements["disregard-button"] = $(createConfimationButton("No, go back!", "disregard-btn"))
+
+  elements["confirm-button"].on('click', async () => {
+    increaseCounter();
+    gameWon = false;
+    gameOver = true;
+    localStorage.setItem('gameWon', 'false');
+    localStorage.setItem('gameOver', 'true');
+    addGuessToLocalStorage(correctAnswer.id);
+    await render(correctAnswer);
+    elements[eventName].remove();
+    delete elements[eventName];
+    createWinScreen();
+    renderGameOverCard('gameOverCard1', 'false', tryCounter);
+
+  })
+
+  elements["disregard-button"].on('click', () => {
+    elements[eventName].remove();
+    delete elements[eventName];
+  })
+
+  elements[eventName].append(elements["confirm-button"]);
+  elements[eventName].append(elements["disregard-button"]);
+}
+
+function renderGameOverCard(eventName, gameWinStatus, nrOfTries) {
+  //console.log('entered renderGameOverCard')
+  // checking if the element already exists OR if there is no handler with that name (just because I don't want to render a button without a handler)
+  if (elements[eventName]) {
+    return;
+  }
+  elements[eventName] = $(createGameOverCard(gameWinStatus, nrOfTries))
+  
+  elements['whatsappBtn'] = $(createWhatsappBtn(nrOfTries, gameWinStatus))
+
+
+  elements.app.append(elements[eventName]);
+  elements.app.find('#game-over-card-btn-container').append(elements['whatsappBtn']);
+  startTimer();
+}
+
 function renderQuitButton(eventName) {
   if (elements[eventName]) {
 
@@ -558,20 +544,6 @@ function renderSideMenu(eventName) {
       renderQuitButton("quit-button");
     }
   })
-
-}
-
-function increaseCounter() {
-  tryCounter++;
-
-  if (elements.counter) {
-    elements.counter.remove();
-  }
-  // Create the score counter element
-  elements.counter = $(createScoreCounter());
-
-  // Append the score counter after the #searchSection element
-  elements.app.find('#homeMenu').after(elements.counter);
 
 }
 
@@ -621,13 +593,6 @@ function renderSuggestions(suggestionsObj) {
   elements.app.find('#searchSection').append(elements.suggestions);
 
 
-}
-
-function addGuessToLocalStorage(movieId) {
-  guesses = JSON.parse(localStorage.getItem('guesses') || '[]');  // Default to an empty array if null
-  guesses.push(movieId);
-  localStorage.setItem('guesses', JSON.stringify(guesses));
-  localStorage.setItem('last play', new Date());
 }
 
 // a function to render a single film, cleaning any previous film card 
@@ -687,6 +652,8 @@ function renderSearchBar(eventName) {
   }
 
 }
+
+export { getCorrectAnswer, displayConsoleLogs }
 
 // an exposed function for the service to give us a handler function to bind to an event
 export function bind(eventName, handler) {
