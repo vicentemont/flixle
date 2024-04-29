@@ -38,8 +38,8 @@ function renderStartButton(eventName) {
     }
     elements[eventName] = $(createStartButton(eventName));
 
-    elements[eventName].on('click', () => {
-        getCorrectAnswer();
+    elements[eventName].on('click', async () => {
+        await getCorrectAnswer();
         elements.app.find('#buttonsSection').empty();
         elements['Instructions'].remove();
 

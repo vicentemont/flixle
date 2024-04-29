@@ -6,9 +6,9 @@ const apiKey = "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI1NmQ3YzI2ZjFjMzRmZjA1OTg2NWI3YjY
 
 
 let film;
+let autoCompleteSuggestions = [];
 
 
-export let guesses = [];
 
 async function getCredits(id) {
   const options = {
@@ -33,11 +33,6 @@ async function getCredits(id) {
 
 
 export async function getRandomMovie() {
-  /*  --request GET \
-      --url 'https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&page=1&sort_by=vote_count.asc&vote_average.gte=8&vote_count.gte=1000' \
-      --header 'Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI1NmQ3YzI2ZjFjMzRmZjA1OTg2NWI3YjY2OTFmMWRmYyIsInN1YiI6IjY2MTljZTIwNjllYjkwMDE2M2I3NTgyMCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.sjdfZEmPvZQTV3kKlkCwFlN0UrN-q96L_cgzDDXpn-I' \
-      --header 'accept: application/json' */
-
 
   const api = `https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&page=1&sort_by=vote_count.asc&vote_average.gte=${(Math.random() * 2) + 6}&vote_count.gte=${Math.floor(Math.random() * (35000 - 2000 + 1)) + 5000}`;
 
@@ -84,7 +79,7 @@ export async function getRandomMovie() {
 }
 
 
-let autoCompleteSuggestions = [];
+
 
 async function fetchCardSearch(searchTerm) {
   const api = `https://api.themoviedb.org/3/search/movie?query=${searchTerm}&include_adult=false&language=en-US&page=1'`;

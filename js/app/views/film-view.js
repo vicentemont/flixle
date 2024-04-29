@@ -1,23 +1,58 @@
 // the point of separating elements from their handlers is flexibility
 // I may want elements without any handling functions
-import { persistAnswer, getCurrentAnswer } from "../services/firebase.js";
-import { getFilm, searchFilms, getRandomMovie, guesses } from "../services/film-service.js";
+import { persistAnswer, getCurrentAnswer, today, isSameDay } from "../services/firebase.js";
+import { getFilm, searchFilms, getRandomMovie } from "../services/film-service.js";
+
 
 // and I may want handlers that are shared by multiple elements
 const elements = {};
 const handlers = {};
 
+let guesses = [];
+let dayWasChecked = false;
+
+let gameOver = false;
+let gameWon = false;
 let tryCounter = 0;
+let playLimitless = false;
 
 let menuOpen = false;
-
-let gameWon = false;
-
-let playLimitless = true;
-
-
-// define the correct answer to win the game
 let correctAnswer;
+
+
+async function renderMovieArray(array) {
+  for (const id of array) {  // Use 'for...of' to handle asynchronous operations
+    const movie = await getFilm(id);  // Get the movie asynchronously
+    console.log('Got movie,', movie);
+    await render(movie);  // Render the movie after it's fetched
+  }
+}
+
+function checkDay() {
+  if (dayWasChecked) {
+    return
+  }
+  const lastPlay = new Date(localStorage.getItem('last play'));
+  if (!isSameDay(today, lastPlay)) {
+    localStorage.clear();
+  } else {
+    let usedMovies = JSON.parse(localStorage.getItem('guesses'));
+    tryCounter = usedMovies.length;
+
+    if (elements.counter) {
+      elements.counter.remove();
+    }
+    // Create the score counter element
+    elements.counter = $(createScoreCounter());
+
+    // Append the score counter after the #searchSection element
+    elements.app.find('#homeMenu').after(elements.counter);
+
+    renderMovieArray(usedMovies);
+  }
+  dayWasChecked = true;
+}
+
 
 export let getCorrectAnswer = async function () {
   if (playLimitless) {
@@ -87,8 +122,13 @@ function createConfirmationCard(title, text) {
   `
 }
 
+function createWinScreen() {
+  elements['searchFilms'].remove();
+  delete elements.app.find('searchBar');
+}
+
 function renderConfirmationCard(eventName) {
-  if (elements[eventName] || guesses.length < 1) {
+  if (elements[eventName] || localStorage.length < 1) {
     return;
   }
   elements[eventName] = $(createConfirmationCard("Surrender?", "Do you really wish to know the correct movie?"));
@@ -97,11 +137,17 @@ function renderConfirmationCard(eventName) {
   elements["confirm-button"] = $(createConfimationButton("Yes, I quit!", "confirm-btn"));
   elements["disregard-button"] = $(createConfimationButton("No, go back!", "disregard-btn"))
 
-  elements["confirm-button"].on('click', () => {
+  elements["confirm-button"].on('click', async () => {
+    increaseCounter();
     gameWon = true;
-    render(correctAnswer);
+    gameOver = true;
+    localStorage.setItem('gameWon', 'true');
+    localStorage.setItem('gameOver', 'true');
+    addGuessToLocalStorage(correctAnswer.id);
+    await render(correctAnswer);
     elements[eventName].remove();
     delete elements[eventName];
+    createWinScreen();
   })
 
   elements["disregard-button"].on('click', () => {
@@ -300,10 +346,7 @@ function createFilmCard({ id, title, popularity, genres, budget, actors, revenue
   });
 
 
-  if (id === correctAnswer.id) {
-    gameWon = true;
-    console.log('You win!');
-  }
+
 
   return `<div class="gameCardContainer container"><div id="gameCard" class="" style="background-image: url('https://image.tmdb.org/t/p/w500${poster_path}'); background-size: cover">
   <div>
@@ -336,10 +379,16 @@ function createSuggestions(suggestionsObj) {
     // Convert the nested objects in suggestionsObj into an array
     const suggestionsArray = Object.values(suggestionsObj);
 
-    // Find all suggestions that have matching IDs in guesses
+    // Retrieve 'guesses' from localStorage and ensure it's an array
+    guesses = JSON.parse(localStorage.getItem('guesses') || '[]');  // Default to an empty array if null
+    console.log('guesses are:', guesses);  // Output the array of IDs
+
+    // Find all suggestions that have matching IDs in 'guesses'
     let alreadyUsed = suggestionsArray.filter(suggestion =>
-      guesses.some(guess => guess.id === suggestion.id)
+      guesses.some(guess => guess === suggestion.id)  // Check if 'guess' matches 'suggestion.id'
     );
+
+    console.log('alreadyUsed are:', alreadyUsed);  // Output the filtered suggestions
 
     // Check if there are any objects with matching IDs
     if (alreadyUsed.length > 0) {
@@ -375,7 +424,7 @@ function renderQuitButton(eventName) {
   elements[eventName] = $(createQuitButton());
 
   elements[eventName].on('click', () => {
-    if (gameWon) {
+    if (gameOver) {
       return;
     } else {
       renderConfirmationCard("confirmation-card");
@@ -415,6 +464,19 @@ function renderSideMenu(eventName) {
 
 }
 
+function increaseCounter(){
+  tryCounter++;
+
+  if (elements.counter) {
+    elements.counter.remove();
+  }
+  // Create the score counter element
+  elements.counter = $(createScoreCounter());
+
+  // Append the score counter after the #searchSection element
+  elements.app.find('#homeMenu').after(elements.counter);
+
+}
 
 // adds EventListener to each suggestion to search when clicked by user
 function renderSuggestions(suggestionsObj) {
@@ -427,17 +489,8 @@ function renderSuggestions(suggestionsObj) {
     const suggestionText = $(event.target).text();
     const suggestionId = $(event.target).attr('movieid');
     console.log(suggestionId);
-    tryCounter++;
-
-    if (elements.counter) {
-      elements.counter.remove();
-    }
-    // Create the score counter element
-    elements.counter = $(createScoreCounter());
-
-    // Append the score counter after the #searchSection element
-    elements.app.find('#homeMenu').after(elements.counter);
-
+    
+    increaseCounter();
     // Set the value of the search bar to the clicked suggestion
     elements.app.find('#searchBar').val(suggestionText);
 
@@ -447,10 +500,11 @@ function renderSuggestions(suggestionsObj) {
 
     // Trigger a search based on the clicked suggestion
     // Assuming you have a function to handle the search
-    //handlers.getFilm(suggestionId);
     let movie = await getFilm(suggestionId);
-    guesses.push(movie);
-    console.log("guesses so far: ", guesses);
+    guesses.push(movie.id);
+    localStorage.setItem('guesses', JSON.stringify(guesses));
+    localStorage.setItem('last play', new Date());
+    //console.log("guesses so far: ", guesses);
     render(movie);
 
   });
@@ -460,15 +514,33 @@ function renderSuggestions(suggestionsObj) {
 
 }
 
+function addGuessToLocalStorage(movieId) {
+  guesses = JSON.parse(localStorage.getItem('guesses') || '[]');  // Default to an empty array if null
+  guesses.push(movieId);
+  localStorage.setItem('guesses', JSON.stringify(guesses));
+  localStorage.setItem('last play', new Date());
+}
+
 // a function to render a single film, cleaning any previous film card 
 function renderFilm(film) {
   elements.filmCard = $(createFilmCard(film));
   elements.app.find('#searchSection').after(elements.filmCard);
+  if (film.id === correctAnswer.id) {
+    gameWon = true;
+    gameOver = true;
+    localStorage.setItem('gameWon', 'true');
+    localStorage.setItem('gameOver', 'true');
+    createWinScreen();
+    
+    console.log('You win!');
+  }
+  
 }
 
 // adds EventListeners to searchBar element
 function renderSearchBar(eventName) {
-
+  let gameState = localStorage.getItem('gameOver');
+  
   // checking if the element already exists OR if there is no handler with that name (just because I don't want to render a button without a handler)
   if (elements[eventName] || !handlers[eventName]) {
     return;
@@ -501,8 +573,12 @@ function renderSearchBar(eventName) {
       elements.app.find('#searchBar').nextAll().remove();
     }
   });
-
+  
   elements.app.append(elements[eventName]);
+  if(gameState === 'true'){
+    elements.app.find('#searchBar').remove()
+  }
+  
 }
 
 // an exposed function for the service to give us a handler function to bind to an event
@@ -513,7 +589,9 @@ export function bind(eventName, handler) {
 // the render function, which will trigger the rendering of the button firstly
 // in this version, this is the function where one decides what will be rendered
 export async function render(data) {
+
   elements.app = $("#app");
+  checkDay();
   renderSearchBar("searchFilms");
   renderSideMenu("sideMenu");
 

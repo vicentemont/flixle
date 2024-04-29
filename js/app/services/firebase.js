@@ -29,9 +29,9 @@ const db = getFirestore(app);  // Firestore instance
 
 let currentAnswerId = "";
 
-const today = new Date();
+export const today = new Date();
 
-const isSameDay = (date1, date2) => {
+export const isSameDay = (date1, date2) => {
     return (
       date1.getFullYear() === date2.getFullYear() &&
       date1.getMonth() === date2.getMonth() &&
