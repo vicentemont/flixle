@@ -341,6 +341,7 @@ function compare(param, param1, title) {
 
 // a function to create a film card, which is the html code for a single film
 function createFilmCard({ id, title, popularity, genres, budget, actors, revenue, director, original_language, vote_average, origin_country, release_date, poster_path }) {
+
   const actorWithHighestPopularity = actors.reduce((prevActor, currentActor) => {
     return (prevActor.popularity > currentActor.popularity) ? prevActor : currentActor;
   });

@@ -4,6 +4,7 @@ import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.1.1/firebase
 import { getFirestore } from 'https://www.gstatic.com/firebasejs/9.1.1/firebase-firestore.js';
 import { collection, getDocs, addDoc, Timestamp } from "https://www.gstatic.com/firebasejs/9.1.1/firebase-firestore.js"
 import { query, orderBy, limit, where, onSnapshot } from "https://www.gstatic.com/firebasejs/9.1.1/firebase-firestore.js"
+import { getFilm } from './film-service.js';
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -75,7 +76,8 @@ export async function getCurrentAnswer() {
         });
 
         if (currentAnswer) {
-            return currentAnswer.data();  // Return the document if found
+            const movie = await getFilm(currentAnswer.data().id)
+            return movie ;  // Return the document if found
         } else {
             return null;  // Return null if no document is from today
         }
