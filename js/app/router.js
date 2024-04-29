@@ -1,4 +1,5 @@
 import { routes } from "./routes.js";
+import { displayConsoleLogs } from "./views/film-view.js";
 
 // just a name for a default route, corresponding to one of the routes keys, for when the shit hits the fan
 const defaultRoute = "home";
@@ -16,17 +17,24 @@ function hashchangeHandler() {
 
   location.hash = routes[routeName].hash;
   loadController(routes[routeName].controller);
-  console.log('hashChanged')
+  if (displayConsoleLogs) {
+    console.log('hashChanged')
+
+  }
 }
 
 async function loadController(controllerName) {
   try {
     // import the controller dinamically and start it
     const controller = await import(`./controllers/${controllerName}.js`);
-    console.log('loadedFileJS')
+    if (displayConsoleLogs) {
+      console.log('loadedFileJS')
+    }
     controller.start();
   } catch (err) {
-    console.log("err is:", err);
+    if (displayConsoleLogs) {
+      console.log("err is:", err);
+    }
     location.hash = routes[defaultRoute].hash;
   }
 }

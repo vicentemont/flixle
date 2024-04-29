@@ -19,10 +19,8 @@ function getFilmHandler(data) {
 
 
 function searchFilmsHandler() {
-  console.log('here')
   const input = $('#searchBar').val(); // Get the input value from the search bar
   const suggestions = searchFilms(input); // Fetch autocomplete suggestions
-  console.log(suggestions);
   render(suggestions); // Render autocomplete suggestions
 }
 // do the binding for the getFilmHandler

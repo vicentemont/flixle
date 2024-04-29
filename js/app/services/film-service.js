@@ -1,3 +1,4 @@
+import { displayConsoleLogs } from "../views/film-view.js";
 
 
 const apiKey = "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI1NmQ3YzI2ZjFjMzRmZjA1OTg2NWI3YjY2OTFmMWRmYyIsInN1YiI6IjY2MTljZTIwNjllYjkwMDE2M2I3NTgyMCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.sjdfZEmPvZQTV3kKlkCwFlN0UrN-q96L_cgzDDXpn-I";
@@ -23,10 +24,14 @@ async function getCredits(id) {
     const response = await fetch(`https://api.themoviedb.org/3/movie/${id}/credits?language=en-US`, options);
     const data = await response.json();
 
-    console.log('data is:' + data);
+    if (displayConsoleLogs) {
+      console.log('data is:' + data);
+    }
     return data;
   } catch (error) {
-    console.error('Error fetching movie credits:', error);
+    if (displayConsoleLogs) {
+      console.error('Error fetching movie credits:', error);
+    }
     throw error;
   }
 }
@@ -49,7 +54,9 @@ export async function getRandomMovie() {
 
 
     if (!response.ok) {
-      console.log('API Error:', body.message);
+      if (displayConsoleLogs) {
+        console.log('API Error:', body.message);
+      }
       throw new Error(body.message);
     }
     // Decode HTML entities in the fetched questions
@@ -62,7 +69,9 @@ export async function getRandomMovie() {
       // Get an array of actor names
       output.actors = actors;
     } else {
-      console.log("No actors found in the 'Acting' department.");
+      if (displayConsoleLogs) {
+        console.log("No actors found in the 'Acting' department.");
+      }
     }
     output.director = directors;
 
@@ -71,7 +80,9 @@ export async function getRandomMovie() {
 
   } catch (error) {
     //resetToken();
-    console.error('Fetch Error:', error);
+    if (displayConsoleLogs) {
+      console.error('Fetch Error:', error);
+    }
     throw error;
   }
 
@@ -94,10 +105,13 @@ async function fetchCardSearch(searchTerm) {
   try {
     const response = await fetch(api, options);
     const body = await response.json();
-    console.log('API ok:', body.results);
-
+    if (displayConsoleLogs) {
+      console.log('API ok:', body.results);
+    }
     if (!response.ok) {
-      console.log('API Error:', body.message);
+      if (displayConsoleLogs) {
+        console.log('API Error:', body.message);
+      }
       throw new Error(body.message);
     }
 
@@ -111,8 +125,9 @@ async function fetchCardSearch(searchTerm) {
     }
     return autoCompleteSuggestions; // Return the autocomplete suggestions
   } catch (error) {
-    //resetToken();
-    console.error('Fetch Error:', error);
+    if (displayConsoleLogs) {
+      console.error('Fetch Error:', error);
+    }
     throw error;
   }
 }
@@ -133,15 +148,21 @@ async function fetchCardById(id) {
 
 
     if (!response.ok) {
-      console.log('API Error:', body.message);
+      if (displayConsoleLogs) {
+        console.log('API Error:', body.message);
+      }
       throw new Error(body.message);
     }
-    console.log(body.Response);
+    if (displayConsoleLogs) {
+      console.log(body.Response);
+    }
     if (body.Response === "False" || body.imdbRating === "N/A" || body.imdbRating < 7 || body.year < 1990) {
 
       fetchCardById();
     }
-    console.log('API Response:', body);
+    if (displayConsoleLogs) {
+      console.log('API Response:', body);
+    }
     // Decode HTML entities in the fetched questions
 
     film = body;
@@ -155,14 +176,19 @@ async function fetchCardById(id) {
       film.actors = actors;
 
     } else {
-      console.log("No actors found in the 'Acting' department.");
+      if (displayConsoleLogs) {
+        console.log("No actors found in the 'Acting' department.");
+      }
     }
     film.director = directors;
-    console.log('film is: ', film);
 
+    if (displayConsoleLogs) {
+      console.log('film is: ', film);
+    }
   } catch (error) {
-    //resetToken();
-    console.error('Fetch Error:', error);
+    if (displayConsoleLogs) {
+      console.error('Fetch Error:', error);
+    }
     throw error;
   }
 }

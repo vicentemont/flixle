@@ -19,11 +19,17 @@ let playLimitless = false;
 let menuOpen = false;
 let correctAnswer;
 
+export let displayConsoleLogs = false;
+
+
+
 
 async function renderMovieArray(array) {
   for (const id of array) {  // Use 'for...of' to handle asynchronous operations
     const movie = await getFilm(id);  // Get the movie asynchronously
-    console.log('Got movie,', movie);
+    if (displayConsoleLogs) {
+      console.log('Got movie,', movie);
+    }
     await render(movie);  // Render the movie after it's fetched
   }
 }
@@ -49,6 +55,7 @@ function checkDay() {
     elements.app.find('#homeMenu').after(elements.counter);
 
     renderMovieArray(usedMovies);
+
   }
   dayWasChecked = true;
 }
@@ -75,17 +82,24 @@ export let getCorrectAnswer = async function () {
       const currentAnswer = await getCurrentAnswer();
 
       if (!currentAnswer) {  // If it's null or undefined, generate a new answer
-        console.log("No current answer found. Generating a new correct answer...");
+        if (displayConsoleLogs) {
+          console.log("No current answer found. Generating a new correct answer...");
+        }
+
         correctAnswer = await getRandomMovie();  // Generate a new correct answer
         persistAnswer(correctAnswer);  // Persist the new correct answer
       } else {
-        console.log("Current answer found:", currentAnswer);
+        if (displayConsoleLogs) {
+          console.log("Current answer found:", currentAnswer);
+        }
         correctAnswer = currentAnswer;  // Use the current answer
       }
 
       return correctAnswer;  // Return the correct answer (new or existing)
     } catch (e) {
-      console.error("Error in getCorrectAnswer:", e);
+      if (displayConsoleLogs) {
+        console.error("Error in getCorrectAnswer:", e);
+      }
       throw e;  // Re-throw the error for handling in calling functions
     }
   }
@@ -122,10 +136,14 @@ function createConfirmationCard(title, text) {
   `
 }
 
+
+
 function createWinScreen() {
   elements['searchFilms'].remove();
   delete elements.app.find('searchBar');
 }
+
+
 
 function renderConfirmationCard(eventName) {
   if (elements[eventName] || localStorage.length < 1) {
@@ -139,15 +157,17 @@ function renderConfirmationCard(eventName) {
 
   elements["confirm-button"].on('click', async () => {
     increaseCounter();
-    gameWon = true;
+    gameWon = false;
     gameOver = true;
-    localStorage.setItem('gameWon', 'true');
+    localStorage.setItem('gameWon', 'false');
     localStorage.setItem('gameOver', 'true');
     addGuessToLocalStorage(correctAnswer.id);
     await render(correctAnswer);
     elements[eventName].remove();
     delete elements[eventName];
     createWinScreen();
+    renderGameOverCard('gameOverCard1', 'false', tryCounter);
+
   })
 
   elements["disregard-button"].on('click', () => {
@@ -339,6 +359,45 @@ function compare(param, param1, title) {
 
 }
 
+function createGameOverCard(gameWinStatus, nrOfTries) {
+  if (gameWinStatus === 'true') {
+    return `<div class="game-over-card-container"><div id="game-over-card"><h3>You Win! &#127881;</h3>You've won Flixle after ${nrOfTries} tries!<div id="game-over-card-btn-container"></div></div></div>`
+  } else {
+    return `<div class="game-over-card-container"><div id="game-over-card"><h3>You Surrended! &#127987</h3>You gave up on Flixle after ${nrOfTries} tries!<div id="game-over-card-btn-container"></div></div></div>`
+
+  }
+}
+
+function createWhatsappBtn(nrOfTries, gameWinStatus) {
+  if (gameWinStatus) {
+    return `<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+    <a href="https://api.whatsapp.com/send?text=I%C2%B4ve%20won%20Flixle%20after%20${nrOfTries}%20tries%21%20%F0%9F%8E%89%20%F0%9F%8E%89%20%F0%9F%8E%89%0ACan%20you%20beat%20me%3F%3F%20%F0%9F%A5%8A%20%F0%9F%A5%8A%0Ahttps%3A%2F%2Fvicentemont.github.io%2Fflixle%2F%23game" class="float" target="_blank">
+    Share on Whatsapp <i class="fa fa-whatsapp my-float"></i>
+    </a>`
+  } else {
+    return `<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+    <a href="I%20gave%20up%20on%20Flixle%20after%20${nrOfTries}%20tries%21%20%F0%9F%8F%B3%EF%B8%8F%20%F0%9F%8F%B3%EF%B8%8F%20%F0%9F%8F%B3%EF%B8%8F%0ACan%20you%20beat%20me%3F%3F%20%F0%9F%A5%8A%20%F0%9F%A5%8A%0Ahttps%3A%2F%2Fvicentemont.github.io%2Fflixle%2F%23game" class="float" target="_blank">
+    Share on Whatsapp <i class="fa fa-whatsapp my-float"></i>
+    </a>`
+  }
+
+}
+
+function renderGameOverCard(eventName, gameWinStatus, nrOfTries) {
+  //console.log('entered renderGameOverCard')
+  // checking if the element already exists OR if there is no handler with that name (just because I don't want to render a button without a handler)
+  if (elements[eventName]) {
+    return;
+  }
+  elements[eventName] = $(createGameOverCard(gameWinStatus, nrOfTries))
+  elements['whatsappBtn'] = $(createWhatsappBtn(nrOfTries, gameWinStatus))
+
+
+  elements.app.append(elements[eventName]);
+  elements.app.find('#game-over-card-btn-container').append(elements['whatsappBtn']);
+
+}
+
 // a function to create a film card, which is the html code for a single film
 function createFilmCard({ id, title, popularity, genres, budget, actors, revenue, director, original_language, vote_average, origin_country, release_date, poster_path }) {
 
@@ -382,20 +441,20 @@ function createSuggestions(suggestionsObj) {
 
     // Retrieve 'guesses' from localStorage and ensure it's an array
     guesses = JSON.parse(localStorage.getItem('guesses') || '[]');  // Default to an empty array if null
-    console.log('guesses are:', guesses);  // Output the array of IDs
+    //console.log('guesses are:', guesses);  // Output the array of IDs
 
     // Find all suggestions that have matching IDs in 'guesses'
     let alreadyUsed = suggestionsArray.filter(suggestion =>
       guesses.some(guess => guess === suggestion.id)  // Check if 'guess' matches 'suggestion.id'
     );
 
-    console.log('alreadyUsed are:', alreadyUsed);  // Output the filtered suggestions
+    //console.log('alreadyUsed are:', alreadyUsed);  // Output the filtered suggestions
 
     // Check if there are any objects with matching IDs
     if (alreadyUsed.length > 0) {
-      console.log("An object with a matching ID was already searched.", alreadyUsed);
+      //console.log("An object with a matching ID was already searched.", alreadyUsed);
     } else {
-      console.log("No object with a matching ID found.");
+      //console.log("No object with a matching ID found.");
     }
 
     function checkIfItsBeenUsed(elementId) {
@@ -423,7 +482,7 @@ function renderQuitButton(eventName) {
     return;
   }
   elements[eventName] = $(createQuitButton());
-
+  gameOver = localStorage.getItem('gameOver');
   elements[eventName].on('click', () => {
     if (gameOver) {
       return;
@@ -465,7 +524,7 @@ function renderSideMenu(eventName) {
 
 }
 
-function increaseCounter(){
+function increaseCounter() {
   tryCounter++;
 
   if (elements.counter) {
@@ -489,8 +548,10 @@ function renderSuggestions(suggestionsObj) {
     // Get the text of the clicked suggestion
     const suggestionText = $(event.target).text();
     const suggestionId = $(event.target).attr('movieid');
-    console.log(suggestionId);
-    
+    if (displayConsoleLogs) {
+      console.log(suggestionId);
+    }
+
     increaseCounter();
     // Set the value of the search bar to the clicked suggestion
     elements.app.find('#searchBar').val(suggestionText);
@@ -506,8 +567,18 @@ function renderSuggestions(suggestionsObj) {
     localStorage.setItem('guesses', JSON.stringify(guesses));
     localStorage.setItem('last play', new Date());
     //console.log("guesses so far: ", guesses);
-    render(movie);
-
+    await render(movie);
+    if (movie.id === correctAnswer.id) {
+      gameWon = true;
+      gameOver = true;
+      localStorage.setItem('gameWon', 'true');
+      localStorage.setItem('gameOver', 'true');
+      createWinScreen();
+      renderGameOverCard('gameOverCard1', 'true', tryCounter);
+      if (displayConsoleLogs) {
+        console.log('You win!');
+      }
+    }
   });
   elements.app.find('#searchBar').nextAll().remove();
   elements.app.find('#searchSection').append(elements.suggestions);
@@ -526,22 +597,15 @@ function addGuessToLocalStorage(movieId) {
 function renderFilm(film) {
   elements.filmCard = $(createFilmCard(film));
   elements.app.find('#searchSection').after(elements.filmCard);
-  if (film.id === correctAnswer.id) {
-    gameWon = true;
-    gameOver = true;
-    localStorage.setItem('gameWon', 'true');
-    localStorage.setItem('gameOver', 'true');
-    createWinScreen();
-    
-    console.log('You win!');
-  }
-  
+
+
 }
 
 // adds EventListeners to searchBar element
 function renderSearchBar(eventName) {
   let gameState = localStorage.getItem('gameOver');
-  
+  let gameWinStatus = localStorage.getItem('gameWon');
+
   // checking if the element already exists OR if there is no handler with that name (just because I don't want to render a button without a handler)
   if (elements[eventName] || !handlers[eventName]) {
     return;
@@ -555,7 +619,9 @@ function renderSearchBar(eventName) {
     const inputValue = event.target.value;
     suggestions = handlers[eventName](inputValue);
     // Call your function to fetch autocomplete suggestions passing the input value
-    console.log('suggestions are: ' + suggestions)
+    if (displayConsoleLogs) {
+      console.log('suggestions are: ' + suggestions)
+    }
   });
 
   // Add event listener for the 'Enter key' event
@@ -567,17 +633,21 @@ function renderSearchBar(eventName) {
         render(getFilm(suggestions[0].id));
 
       } catch (error) {
-        console.error('Error while searching films:', error);
+        if (displayConsoleLogs) {
+          console.error('Error while searching films:', error);
+        }
       }
       elements.app.find('#searchBar').nextAll().remove();
     }
   });
-  
+
   elements.app.append(elements[eventName]);
-  if(gameState === 'true'){
-    elements.app.find('#searchBar').remove()
+  if (gameState === 'true') {
+    elements.app.find('#searchBar').remove();
+    renderGameOverCard('gameOverCard1', gameWinStatus, tryCounter);
+
   }
-  
+
 }
 
 // an exposed function for the service to give us a handler function to bind to an event
