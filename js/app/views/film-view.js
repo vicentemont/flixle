@@ -548,8 +548,6 @@ function renderSearchBar(eventName) {
 
   elements[eventName] = $(createInput());
 
-  elements[eventName].focus();
-
   let suggestions = [];
   // Add event listener for the 'input' event
   elements[eventName].on('input', function (event) {
