@@ -369,14 +369,14 @@ function createGameOverCard(gameWinStatus, nrOfTries) {
 }
 
 function createWhatsappBtn(nrOfTries, gameWinStatus) {
-  if (gameWinStatus) {
+  if (gameWinStatus === 'true') {
     return `<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
     <a href="https://api.whatsapp.com/send?text=I%C2%B4ve%20won%20Flixle%20after%20${nrOfTries}%20tries%21%20%F0%9F%8E%89%20%F0%9F%8E%89%20%F0%9F%8E%89%0ACan%20you%20beat%20me%3F%3F%20%F0%9F%A5%8A%20%F0%9F%A5%8A%0Ahttps%3A%2F%2Fvicentemont.github.io%2Fflixle%2F%23game" class="float" target="_blank">
     Share on Whatsapp <i class="fa fa-whatsapp my-float"></i>
     </a>`
   } else {
     return `<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
-    <a href="I%20gave%20up%20on%20Flixle%20after%20${nrOfTries}%20tries%21%20%F0%9F%8F%B3%EF%B8%8F%20%F0%9F%8F%B3%EF%B8%8F%20%F0%9F%8F%B3%EF%B8%8F%0ACan%20you%20beat%20me%3F%3F%20%F0%9F%A5%8A%20%F0%9F%A5%8A%0Ahttps%3A%2F%2Fvicentemont.github.io%2Fflixle%2F%23game" class="float" target="_blank">
+    <a href="https://api.whatsapp.com/send?text=I%20gave%20up%20on%20Flixle%20after%20${nrOfTries}%20tries%21%20%F0%9F%8F%B3%EF%B8%8F%20%F0%9F%8F%B3%EF%B8%8F%20%F0%9F%8F%B3%EF%B8%8F%0ACan%20you%20beat%20me%3F%3F%20%F0%9F%A5%8A%20%F0%9F%A5%8A%0Ahttps%3A%2F%2Fvicentemont.github.io%2Fflixle%2F%23game" class="float" target="_blank">
     Share on Whatsapp <i class="fa fa-whatsapp my-float"></i>
     </a>`
   }
@@ -604,7 +604,7 @@ function renderFilm(film) {
 // adds EventListeners to searchBar element
 function renderSearchBar(eventName) {
   let gameState = localStorage.getItem('gameOver');
-  let gameWinStatus = localStorage.getItem('gameWon');
+  
 
   // checking if the element already exists OR if there is no handler with that name (just because I don't want to render a button without a handler)
   if (elements[eventName] || !handlers[eventName]) {
@@ -642,6 +642,7 @@ function renderSearchBar(eventName) {
   });
 
   elements.app.append(elements[eventName]);
+  let gameWinStatus = localStorage.getItem('gameWon');
   if (gameState === 'true') {
     elements.app.find('#searchBar').remove();
     renderGameOverCard('gameOverCard1', gameWinStatus, tryCounter);
