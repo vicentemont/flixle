@@ -359,11 +359,47 @@ function compare(param, param1, title) {
 
 }
 
+
+// Function to get the time remaining until the end of the day
+function getTimeRemaining() {
+  // Get current time
+  const now = new Date();
+  
+  // Get end of the day (midnight)
+  const endOfDay = new Date(now);
+  endOfDay.setHours(23, 59, 59, 999); // Set to midnight (23:59:59.999)
+  
+  // Calculate time difference in milliseconds
+  const timeDifference = endOfDay - now;
+
+  // Convert milliseconds to hours, minutes, and seconds
+  const hours = Math.floor(timeDifference / (1000 * 60 * 60));
+  const minutes = Math.floor((timeDifference / (1000 * 60)) % 60);
+  const seconds = Math.floor((timeDifference / 1000) % 60);
+
+  return { hours, minutes, seconds };
+}
+
+// Function to update the timer display
+function updateTimer() {
+  const timerElement = document.getElementById("timer");
+  const timeRemaining = getTimeRemaining();
+
+  timerElement.innerHTML = `${timeRemaining.hours}h ${timeRemaining.minutes}m ${timeRemaining.seconds}s`;
+}
+
+// Initialize the timer with a 1-second interval
+function startTimer() {
+  updateTimer(); // Initial update
+  setInterval(updateTimer, 1000); // Update every second
+}
+
+
 function createGameOverCard(gameWinStatus, nrOfTries) {
   if (gameWinStatus === 'true') {
-    return `<div class="game-over-card-container"><div id="game-over-card"><h3>You Win! &#127881;</h3>You've won Flixle after ${nrOfTries} tries!<div id="game-over-card-btn-container"></div></div></div>`
+    return `<div class="game-over-card-container" ><div id="game-over-card"><h3>You Win! &#127881;</h3>You've won Flixle after ${nrOfTries} tries!<div id="game-over-card-btn-container"></div><div id="timer-text">New movie in: <p id="timer"></p></div></div></div>`
   } else {
-    return `<div class="game-over-card-container"><div id="game-over-card"><h3>You Surrended! &#127987</h3>You gave up on Flixle after ${nrOfTries} tries!<div id="game-over-card-btn-container"></div></div></div>`
+    return `<div class="game-over-card-container" ><div id="game-over-card"><h3>You Surrended! &#127987</h3>You gave up on Flixle after ${nrOfTries} tries!<div id="game-over-card-btn-container"></div><div id="timer-text">New movie in: <p id="timer"></p></div></div></div>`
 
   }
 }
@@ -390,12 +426,13 @@ function renderGameOverCard(eventName, gameWinStatus, nrOfTries) {
     return;
   }
   elements[eventName] = $(createGameOverCard(gameWinStatus, nrOfTries))
+  
   elements['whatsappBtn'] = $(createWhatsappBtn(nrOfTries, gameWinStatus))
 
 
   elements.app.append(elements[eventName]);
   elements.app.find('#game-over-card-btn-container').append(elements['whatsappBtn']);
-
+  startTimer();
 }
 
 // a function to create a film card, which is the html code for a single film

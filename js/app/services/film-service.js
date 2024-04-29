@@ -11,6 +11,9 @@ let autoCompleteSuggestions = [];
 
 
 
+
+
+
 async function getCredits(id) {
   const options = {
     method: 'GET',
