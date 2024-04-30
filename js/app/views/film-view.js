@@ -342,12 +342,20 @@ function createScoreCounter() {
   </div>`
 }
 
+function rendeConfetti(){
+  elements['confeetti'] = ``
+}
+
 function createGameOverCard(gameWinStatus, nrOfTries) {
 
   if (gameWinStatus === 'true') {
-    return `<script src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs" type="module"></script> 
+    return `
+    <script src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs" type="module"></script> 
 
-    <dotlottie-player src="https://lottie.host/1ac69695-d056-4f35-9113-fa4a40a14815/tNHEY9SuOs.json" background="transparent" speed="1" style="width: 100%; height: 100%;" loop autoplay></dotlottie-player>
+    <div id="lottie-animations">
+    <dotlottie-player src="https://lottie.host/c59d99ba-4b8f-4a77-ba2b-e6045f774660/KTN91j6eVX.json" background="transparent" speed="1" loop autoplay></dotlottie-player>
+    <dotlottie-player src="https://lottie.host/c59d99ba-4b8f-4a77-ba2b-e6045f774660/KTN91j6eVX.json" background="transparent" speed="1" loop autoplay></dotlottie-player>
+    </div>
     <div class="game-over-card-container" ><div id="game-over-card"><h3>You Win! &#127881;</h3>You've won Flixle after ${nrOfTries} tries!<div id="game-over-card-btn-container"></div><div id="timer-text">New movie in: <p id="timer"></p></div></div></div>`
   } else {
     return `<div class="game-over-card-container" ><div id="game-over-card"><h3>You Surrended! &#127987</h3>You gave up on Flixle after ${nrOfTries} tries!<div id="game-over-card-btn-container"></div><div id="timer-text">New movie in: <p id="timer"></p></div></div></div>`
