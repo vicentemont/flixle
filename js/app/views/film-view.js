@@ -1,9 +1,7 @@
 // the point of separating elements from their handlers is flexibility
 // I may want elements without any handling functions
 import { persistAnswer, getCurrentAnswer, today, isSameDay } from "../services/firebase.js";
-import { getFilm, searchFilms, getRandomMovie ,startTimer} from "../services/film-service.js";
-
-
+import { getFilm, searchFilms, getRandomMovie, startTimer } from "../services/film-service.js";
 // and I may want handlers that are shared by multiple elements
 const elements = {};
 const handlers = {};
@@ -345,8 +343,12 @@ function createScoreCounter() {
 }
 
 function createGameOverCard(gameWinStatus, nrOfTries) {
+
   if (gameWinStatus === 'true') {
-    return `<div class="game-over-card-container" ><div id="game-over-card"><h3>You Win! &#127881;</h3>You've won Flixle after ${nrOfTries} tries!<div id="game-over-card-btn-container"></div><div id="timer-text">New movie in: <p id="timer"></p></div></div></div>`
+    return `<script src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs" type="module"></script> 
+
+    <dotlottie-player src="https://lottie.host/1ac69695-d056-4f35-9113-fa4a40a14815/tNHEY9SuOs.json" background="transparent" speed="1" style="width: 100%; height: 100%;" loop autoplay></dotlottie-player>
+    <div class="game-over-card-container" ><div id="game-over-card"><h3>You Win! &#127881;</h3>You've won Flixle after ${nrOfTries} tries!<div id="game-over-card-btn-container"></div><div id="timer-text">New movie in: <p id="timer"></p></div></div></div>`
   } else {
     return `<div class="game-over-card-container" ><div id="game-over-card"><h3>You Surrended! &#127987</h3>You gave up on Flixle after ${nrOfTries} tries!<div id="game-over-card-btn-container"></div><div id="timer-text">New movie in: <p id="timer"></p></div></div></div>`
 
@@ -490,7 +492,7 @@ function renderGameOverCard(eventName, gameWinStatus, nrOfTries) {
     return;
   }
   elements[eventName] = $(createGameOverCard(gameWinStatus, nrOfTries))
-  
+
   elements['whatsappBtn'] = $(createWhatsappBtn(nrOfTries, gameWinStatus))
 
 
