@@ -39,11 +39,12 @@ function renderStartButton(eventName) {
     elements[eventName] = $(createStartButton(eventName));
 
     elements[eventName].on('click', async () => {
-        await getCorrectAnswer();
+        
         elements.app.find('#buttonsSection').empty();
         elements['Instructions'].remove();
 
         window.location.hash = "game";
+        await getCorrectAnswer();
     })
 
     elements.app.find('#buttonsSection').append(elements[eventName])
