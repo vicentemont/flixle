@@ -114,6 +114,38 @@ function roundNumber(number) {
   }
 }
 
+function checkIfNumberIsNear(numToCompare, num) {
+  if (numToCompare === num) {
+    return `background-color: #1ed760d9;` //Green
+  } else if (numToCompare > 100000) {
+    if (numToCompare < num + 100000000 && numToCompare > num - 100000000) { //If its a Budget
+      return `background-color: #ffa500d6;` //Orange;
+    }else {
+      return `background-color: rgba(255, 0, 0, 0.8);` //Red
+    }
+  } else if (numToCompare > 1500) {
+    if (numToCompare < num + 5 && numToCompare > num - 5) { //If its a Date
+      return `background-color: #ffa500d6;` //Orange;
+    }else {
+      return `background-color: rgba(255, 0, 0, 0.8);` //Red
+    }
+  } else if (numToCompare > 10) {
+    if (numToCompare < num + 20 && numToCompare > num - 20) { //If its a Popularity
+      return `background-color: #ffa500d6;` //Orange;
+    }else {
+      return `background-color: rgba(255, 0, 0, 0.8);` //Red
+    }
+  } else if (numToCompare < num + 20) {
+    if (numToCompare > num - 20) { //If its a Rating
+      return `background-color: #ffa500d6;` //Orange;
+    }else {
+      return `background-color: rgba(255, 0, 0, 0.8);` //Red
+    }
+  } else {
+    return `background-color: rgba(255, 0, 0, 0.8);` //Red
+  }
+}
+
 // compares search results with correct game answer and returns correct html with correct color ans proximity symbols
 function compare(param, param1, title) {
   if (title === "ACTOR") {
@@ -207,7 +239,7 @@ function compare(param, param1, title) {
     }
   } else if (param === param1) {
     return `
-    <div id="${param}" class="movieDetail" style="background-color: #1ed760d9;"> 
+    <div id="${param}" class="movieDetail" style="${checkIfNumberIsNear(param1, param)}"> 
     <p class="squareName">${title}</p>
     <div>
     <span> ${roundNumber(param)} </span>
@@ -215,7 +247,7 @@ function compare(param, param1, title) {
     </div>`;
   } else if (param > param1) {
     return `
-    <div id="${param}" class="movieDetail" style="background-color: #ffa500d6;"> 
+    <div id="${param}" class="movieDetail" style="${checkIfNumberIsNear(param1, param)}"> 
     <p class="squareName">${title}</p>
     <div>
     <span>&darr; ${roundNumber(param)} </span>
@@ -223,7 +255,7 @@ function compare(param, param1, title) {
     </div>`;
   } else if (param < param1) {
     return `
-    <div id="${param}" class="movieDetail" style="background-color: #ffa500d6;"> 
+    <div id="${param}" class="movieDetail" style="${checkIfNumberIsNear(param1, param)}"> 
     <p class="squareName">${title}</p>
     <div>
     <span>&uarr;${roundNumber(param)}</span>
@@ -342,7 +374,7 @@ function createScoreCounter() {
   </div>`
 }
 
-function rendeConfetti(){
+function rendeConfetti() {
   elements['confeetti'] = ``
 }
 
