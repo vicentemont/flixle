@@ -17,7 +17,7 @@ let playLimitless = false;
 let menuOpen = false;
 let correctAnswer;
 
-let displayConsoleLogs = true;
+let displayConsoleLogs = false;
 
 
 
@@ -398,7 +398,7 @@ function createFilmCard({ id, title, popularity, genres, budget, actors, revenue
   </div>
   <div id="movieDetails" >
   
-  ${compare(vote_average, correctAnswer.vote_average, "TMDB")}
+  ${compare(Number(vote_average.toFixed(1)), Number(correctAnswer.vote_average.toFixed(1)), "TMDB")}
   ${compare(origin_country[0], correctAnswer.origin_country[0], "COUNTRY")}
   ${compare(budget, correctAnswer.budget, "BUDGET")}
   ${compare(Number(release_date.substring(0, 4)), Number(correctAnswer.release_date.substring(0, 4)), "YEAR")}
