@@ -17,7 +17,7 @@ let playLimitless = false;
 let menuOpen = false;
 let correctAnswer;
 
-let displayConsoleLogs = false;
+let displayConsoleLogs = true;
 
 
 
@@ -444,10 +444,9 @@ function createSuggestions(suggestionsObj) {
         return ``;
       }
     }
-
     // Generate the suggestions as HTML
     const suggestions = suggestionsArray.map(suggestion =>
-      `<div class="suggestion" movieid="${suggestion.id}">${checkIfItsBeenUsed(suggestion.id)}${suggestion.Title}</div>`
+      `<div class="suggestion" movieid="${suggestion.id}"><div movieid="${suggestion.id}" id="suggestion-title">${checkIfItsBeenUsed(suggestion.id)}${suggestion.Title}</div> <div id="suggestion-year">${suggestion.year}</div></div>`
     ).join('');
 
     return `<div id="suggestionsContainer">${suggestions}</div>`;

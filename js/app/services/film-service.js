@@ -153,7 +153,8 @@ async function fetchCardSearch(searchTerm) {
     for (var i = 0; i < 5; i++) {
       autoCompleteSuggestions.push({
         Title: body.results[i].title,
-        id: body.results[i].id
+        id: body.results[i].id,
+        year: Number(body.results[i].release_date.substring(0, 4))
       })
     }
     return autoCompleteSuggestions; // Return the autocomplete suggestions

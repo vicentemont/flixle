@@ -508,9 +508,10 @@ textarea {
     margin: 0px;
     padding-left: 10px;
     padding-right: 10px;
-    display: block;
+    display:flex;
     /* Change display property to block */
-    align-items: center;
+    align-items:center;
+    justify-content: space-between;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
@@ -520,6 +521,20 @@ textarea {
 #suggestionsContainer {
     margin-top: 5px;
 
+}
+
+#suggestion-title{
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+#suggestion-year{
+    color: gray;
+    text-align:start;
+    font-variant-numeric: tabular-nums;
+    align-items: end;
+    
 }
 
 #movieDetails {
