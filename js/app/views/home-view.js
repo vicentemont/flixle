@@ -42,9 +42,9 @@ function renderStartButton(eventName) {
         
         elements.app.find('#buttonsSection').empty();
         elements['Instructions'].remove();
-
+await getCorrectAnswer();
         window.location.hash = "game";
-        await getCorrectAnswer();
+        
     })
 
     elements.app.find('#buttonsSection').append(elements[eventName])
