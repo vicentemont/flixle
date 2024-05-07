@@ -34,12 +34,33 @@ export const today = new Date();
 
 export const isSameDay = (date1, date2) => {
     return (
-      date1.getFullYear() === date2.getFullYear() &&
-      date1.getMonth() === date2.getMonth() &&
-      date1.getDate() === date2.getDate()
+        date1.getFullYear() === date2.getFullYear() &&
+        date1.getMonth() === date2.getMonth() &&
+        date1.getDate() === date2.getDate()
     );
-  };
-  
+};
+
+export async function alreadyExistsOnFirebase(id) {
+    try {
+        // Get all documents from the "answers" collection
+        const querySnapshot = await getDocs(collection(db, "answers"));
+
+        // Find a document with the given ID
+        const foundDoc = querySnapshot.docs.find((doc) => {
+            const tmdbIdOnDB = doc.data().id;
+            return tmdbIdOnDB === id;
+        });
+
+        console.log("Doc doesn't exist on DB");
+        // Return true if a document with the ID exists, otherwise false
+        return foundDoc !== undefined;
+
+    } catch (e) {
+        console.error('Error checking existence on Firestore: ', e);
+        throw e;  // Re-throw the error for proper handling
+    }
+}
+
 
 export async function persistAnswer(answerObj) {
     try {
@@ -77,7 +98,7 @@ export async function getCurrentAnswer() {
 
         if (currentAnswer) {
             const movie = await getFilm(currentAnswer.data().id)
-            return movie ;  // Return the document if found
+            return movie;  // Return the document if found
         } else {
             return null;  // Return null if no document is from today
         }

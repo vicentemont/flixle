@@ -1,6 +1,6 @@
 // the point of separating elements from their handlers is flexibility
 // I may want elements without any handling functions
-import { persistAnswer, getCurrentAnswer, today, isSameDay } from "../services/firebase.js";
+import { persistAnswer, getCurrentAnswer, today, isSameDay, alreadyExistsOnFirebase } from "../services/firebase.js";
 import { getFilm, searchFilms, getRandomMovie, startTimer } from "../services/film-service.js";
 // and I may want handlers that are shared by multiple elements
 const elements = {};
@@ -312,6 +312,9 @@ async function getCorrectAnswer() {
         }
 
         correctAnswer = await getRandomMovie();  // Generate a new correct answer
+        while(await alreadyExistsOnFirebase(correctAnswer.id)){
+          correctAnswer = await getRandomMovie();
+        }
         persistAnswer(correctAnswer);  // Persist the new correct answer
       } else {
         if (displayConsoleLogs) {
